@@ -245,7 +245,10 @@ class AcousticAnalyzer:
         if frame_rms.size < 16:
             return 0.0
         n = frame_rms.size
-        freqs = np.fft.rfftfreq(n, d=float(sr * 0.01))
+        # Frame hop is 10 ms (see _frame); the FFT frequency axis therefore
+        # spans 0..50 Hz so the 3-8 Hz psychomotor tremor band is observable.
+        hop_seconds = float(sr * 0.01) / float(sr)
+        freqs = np.fft.rfftfreq(n, d=hop_seconds)
         amp = np.abs(np.fft.rfft(frame_rms - frame_rms.mean()))
         band = (freqs >= TREMOR_LOW) & (freqs <= TREMOR_HIGH)
         if not np.any(band):
