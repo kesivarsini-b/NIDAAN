@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NIDAAN | NHAA 14566 - SVI Operator Dashboard</title>
+    <link rel="stylesheet" href="/static/css/style.css" />
+</head>
+<body>
+    <header class="topbar">
+        <div class="brand">
+            <div class="brand-mark" aria-hidden="true">N</div>
+            <div>
+                <h1>NIDAAN</h1>
+                <p class="tagline">National Intelligent Distress &amp; Atrocity Assessment Network</p>
+            </div>
+        </div>
+        <div class="connection-status">
+            <span class="status-dot" id="wsDot"></span>
+            <span id="wsStatus">Disconnected</span>
+            <span class="session-id" id="sessionId">--</span>
+        </div>
+    </header>
+
+    <main class="layout">
+        <!-- LEFT: Live Call Simulator & Control -->
+        <section class="panel control-panel" aria-label="Call simulator">
+            <h2 class="panel-title">Live Call Simulator</h2>
+
+            <div class="mic-controls">
+                <button id="micToggle" class="btn btn-primary" disabled>
+                    <span class="btn-icon">&#127908;</span> Connect Microphone
+                </button>
+                <span id="micState" class="mic-state">no permission yet</span>
+            </div>
+
+            <div class="scenario-block">
+                <label for="scenarioSelect" class="field-label">Pre-scripted Scenario (15 test cases)</label>
+                <select id="scenarioSelect" class="select" disabled>
+                    <option value="">Loading scenarios...</option>
+                </select>
+                <button id="runScenarioBtn" class="btn btn-secondary" disabled>Run Scenario</button>
+            </div>
+
+            <div class="waveform-panel" aria-label="Rolling audio waveform">
+                <canvas id="waveform" height="120"></canvas>
+            </div>
+
+            <div class="demo-text-input">
+                <label for="demoText" class="field-label">Override Narrative (REST / WS text route)</label>
+                <textarea id="demoText" rows="3" placeholder="Type or paste a Hinglish distress narrative..."></textarea>
+                <div class="row">
+                    <button id="analyzeTextBtn" class="btn btn-secondary">Analyze Text</button>
+                    <button id="resetBtn" class="btn btn-ghost">Reset Session</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- CENTER: SVI Gauge & Live Scores -->
+        <section class="panel gauge-panel" aria-label="Real-time SVI gauge">
+            <h2 class="panel-title">Real-time SVI (Stress &amp; Vulnerability Index)</h2>
+            <div class="gauge-wrap">
+                <svg class="gauge" viewBox="0 0 200 120" role="img" aria-label="SVI gauge">
+                    <defs>
+                        <linearGradient id="gaugeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" stop-color="#22c55e" />
+                            <stop offset="33%" stop-color="#facc15" />
+                            <stop offset="66%" stop-color="#f97316" />
+                            <stop offset="100%" stop-color="#ef4444" />
+                        </linearGradient>
+                    </defs>
+                    <path id="gaugeArc" d="M20 110 A 80 80 0 0 1 180 110" fill="none"
+                          stroke="#1f2937" stroke-width="18" stroke-linecap="round" />
+                    <path id="gaugeProgress" d="M20 110 A 80 80 0 0 1 180 110" fill="none"
+                          stroke="url(#gaugeGrad)" stroke-width="18" stroke-linecap="round"
+                          stroke-dasharray="251.3" stroke-dashoffset="251.3" />
+                    <line id="gaugeNeedle" x1="100" y1="110" x2="100" y2="38"
+                          stroke="#e5e7eb" stroke-width="4" stroke-linecap="round" />
+                    <circle cx="100" cy="110" r="7" fill="#e5e7eb" />
+                </svg>
+                <div id="sviDisplay" class="svi-numeric">--</div>
+                <div id="tierBadge" class="tier-badge tier-unknown">STANDBY</div>
+            </div>
+
+            <div class="subscores">
+                <div class="subscore">
+                    <span class="subscore-label">Acoustic (A&#8323;)</span>
+                    <span id="acousticScore" class="subscore-value">--</span>
+                </div>
+                <div class="subscore">
+                    <span class="subscore-label">Text (T&#8323;)</span>
+                    <span id="textScore" class="subscore-value">--</span>
+                </div>
+                <div class="subscore">
+                    <span class="subscore-label">Signal Conf (C&#8345;&#8330;&#7611;)</span>
+                    <span id="audioConfidence" class="subscore-value">--</span>
+                </div>
+            </div>
+
+            <div class="stress-history">
+                <h3 class="mini-title">SVI Trace</h3>
+                <canvas id="sviTrace" height="90" aria-label="SVI over time"></canvas>
+            </div>
+        </section>
+
+        <!-- RIGHT: Transcript, Triggers & Action Plan -->
+        <section class="panel analysis-panel" aria-label="Analysis outputs">
+            <h2 class="panel-title">Transcript &amp; Analysis</h2>
+
+            <div id="transcriptBox" class="transcript-box">
+                <p class="placeholder">No live transcript yet.</p>
+            </div>
+
+            <div class="triggers-block">
+                <h3 class="mini-title">Detected Trauma Triggers</h3>
+                <div id="triggersList" class="trigger-chips">
+                    <span class="chip chip-empty">No triggers yet</span>
+                </div>
+            </div>
+
+            <div class="keyword-block">
+                <h3 class="mini-title">Raw Indicators</h3>
+                <div id="keywordsList" class="keyword-list">
+                    <span class="muted">--</span>
+                </div>
+            </div>
+
+            <div class="action-block">
+                <h3 class="mini-title">Recommended Action (SC/ST PoA Act Mapper)</h3>
+                <div id="actionPlan" class="action-plan">
+                    <p class="muted">Waiting for first SVI frame...</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footbar">
+        <span>NIDAAN v0.1.0</span>
+        <span class="dot">&middot;</span>
+        <span>MoSJE &middot; NHAA 14566 &middot; Problem Statement ID 26093</span>
+        <span class="dot">&middot;</span>
+        <span id="formulaBadge">SVI = C&#8330;(&#8320;.&#8324;A&#8323;+&#8320;.&#8326;T&#8323;)+(1-C)T&#8323;</span>
+    </footer>
+
+    <script src="/static/js/call_simulator.js"></script>
+    <script src="/static/js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,29 @@
+# ============================================================================
+# NIDAAN - Python dependencies
+# ----------------------------------------------------------------------------
+# Version floors are compatible with Python 3.9 - 3.14 (wheels available).
+# Exact-pinning old releases (e.g. numpy 1.26.x) breaks installs on
+# Python 3.13+/3.14. Floors keep reproducible, resolvable, installable sets.
+# ============================================================================
+
+# ----- Core runtime (required for a working demo) -------------------------
+fastapi>=0.110,<1.0
+uvicorn[standard]>=0.27
+websockets>=12.0
+python-dotenv>=1.0.0
+pydantic>=2.6,<3.0
+jinja2>=3.1.0
+httpx>=0.27.0
+aiofiles>=23.2.0
+
+# ----- Numerical / acoustic processing -------------------------------------
+numpy>=1.26
+scipy>=1.11
+
+# ----- Optional ML/Audio accelerators --------------------------------------
+# NIDAAN runs WITHOUT librosa/soundfile via the built-in NumPy fallback in
+# backend/acoustic_analyzer.py. Install them for full-precision pitch,
+# tremor and file-decoding support. They are kept in this file (per release
+# spec) but are NOT required for the demo to boot.
+librosa>=0.10
+soundfile>=0.12
