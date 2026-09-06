@@ -302,6 +302,15 @@ textarea {
     height: auto;
 }
 
+/* Smooth live animation of the progress arc and needle. */
+.gauge #gaugeProgress {
+    transition: stroke-dashoffset 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.gauge #gaugeNeedle {
+    transition: x2 0.5s cubic-bezier(0.4, 0, 0.2, 1), y2 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
 .svi-numeric {
     font-size: 46px;
     font-weight: 800;
@@ -309,6 +318,7 @@ textarea {
     line-height: 1;
     margin-top: -12px;
     letter-spacing: 0.02em;
+    transition: color 0.4s ease;
 }
 
 .tier-badge {
@@ -486,6 +496,19 @@ textarea {
     left: 0;
     color: var(--accent-dim);
     font-family: var(--mono);
+}
+
+.plan-steps .stat {
+    display: inline-block;
+    margin-left: 6px;
+    padding: 1px 7px;
+    border: 1px solid var(--accent-dim);
+    border-radius: 999px;
+    color: var(--accent);
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.03em;
+    vertical-align: middle;
 }
 
 .poa-sections {

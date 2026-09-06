@@ -45,7 +45,7 @@
 
 | Time | Frame | Visual | Voiceover |
 |---|---|---|---|
-| 2:15 | 4a | Metric cards animate in: **2s** update cadence · **0–100** explainable index · **15** calibrated scenarios · **36/36** regression tests | "Built for 24/7 scale: a two-second cadence that never blocks the call line." |
+| 2:15 | 4a | Metric cards animate in: **2s** update cadence · **0–100** explainable index · **15** calibrated scenarios · **55/55** regression tests | "Built for 24/7 scale: a two-second cadence that never blocks the call line." |
 | 2:24 | 4b | Network toggle: show tray, turn **Wi-Fi OFF**. Dashboard keeps scoring sc-005, badge stays live, no errors | "And the offline proof — force the laptop's network down, and the SVI engine keeps running. Judges included." |
 | 2:32 | 4c | Deployment slide: Docker container icon → `port 8000`, arrows to operator PCs and helpline IVR | "One lightweight container ships the whole engine — ready for MoSJE's pilot cloud or on-prem racks." |
 | 2:41 | 4d | Final frame: team name, PS ID **26093**, **NIDAAN — वजह से समाधान तक** ("from root cause to resolution") | "NIDAAN turns a voice under pressure into a response on the ground. Team NIDAAN — thank you." |

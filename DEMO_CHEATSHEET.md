@@ -80,7 +80,7 @@ Target: 3–5 minutes, zero fluff, offline-safe.
 | Live latency | ~2 s update cadence |
 | Tier bands | 0–30 / 31–60 / 61–80 / 81–100 |
 | Calibrated scenarios | 15 (3×LOW, 3×MODERATE, 3×HIGH, 6×CRITICAL) |
-| Backend regression | 36/36 passing (`pytest tests/test_svi_engine.py`) |
+| Backend regression | 55/55 passing (`pytest tests/`) |
 | Offline verification | 15/15 tier fidelity (Node harness) |
 | Fusion weights | Acoustic 0.4 / Text 0.6 (confidence-weighted) |
 

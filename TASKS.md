@@ -35,6 +35,8 @@
 - [x] Prepare `git` hygiene (`.gitignore`, initial commit, branch policy).
 - [x] Wrap MVP: uvicorn launcher, `python backend/app.py` entry point, README execution steps.
 - [x] Post-MVP: `tests/` unit suite (engine, analyzers, recommender).
+- [x] Release hardening: zero-error acoustic fallbacks (short-chunk/empty/silence), tier-band progress, per-step statute anchors, 55-test suite.
+- [x] Deliverables: `scripts/generate_slides.py` (-> `docs/NIDAAN_SIH_Presentation.pptx`), `scripts/run_daily_qa.py` (scheduled 15-scenario sweep -> `reports/`).
 - [ ] Post-MVP: operator queueing, TLS termination, authN.
 
 **Definition of done:** `uvicorn backend.app:app --reload` boots; dashboard loads; all REST + WS routes respond; 15 scenarios run end-to-end.

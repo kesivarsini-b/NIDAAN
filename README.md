@@ -247,7 +247,7 @@ curl -X POST http://127.0.0.1:8000/api/v1/analyze-text \
 Automated checks:
 
 ```bash
-pytest tests/test_svi_engine.py            # 36-case backend regression suite
+pytest tests/                                 # 55-case backend regression suite
 python mock_caller.py                       # streams all 15 scenarios over WebSocket
 ```
 
@@ -352,9 +352,16 @@ NIDAAN/
 │       ├── call_simulator.js      # Mic + synthetic scenario runner
 │       └── offline_data.js        # Offline Demo Mode scenario registry
 ├── tests/
-│   └── test_svi_engine.py         # 36-case backend regression suite
+│   ├── test_svi_engine.py         # 36-case backend regression suite
+│   └── test_hardening_extras.py   # 19-case zero-error/statute-anchor suite
+├── scripts/
+│   ├── generate_slides.py         # Builds docs/NIDAAN_SIH_Presentation.pptx
+│   └── run_daily_qa.py            # Scheduled 15-scenario sweep -> reports/
+├── reports/
+│   └── daily_qa_*.json            # Dated scenario-sweep reports
 ├── docs/
 │   ├── SIH_SUBMISSION_PPT.md      # 6-slide SIH submission template
+│   ├── NIDAAN_SIH_Presentation.pptx  # Generated 6-slide submission deck
 │   ├── SYSTEM_ARCHITECTURE.md     # ASCII + Mermaid flow, fusion matrix
 │   ├── DEMO_VIDEO_SCRIPT.md       # 3-minute video frame-by-frame script
 │   └── PRESENTATION_DECK.md       # Extended judging deck + Q&A
@@ -374,8 +381,10 @@ NIDAAN/
   flags distress signals; a trained human operator always makes the final
   triage decision.
 - The PoA action mapper cites sections of the SC/ST (Prevention of
-  Atrocities) Act, 1989 for administrative routing and must be validated by
-  the Legal & Domain lead before production.
+  Atrocities) Act, 1989 (as amended in **2015**) for administrative routing —
+  every step returns an explicit `statute` anchor (e.g. Sec 3(2)(v),
+  Sec 15A(1) Witness Protection, Sec 21(2)) — and must be validated by the
+  Legal & Domain lead before production.
 - Audio and transcript payloads should be encrypted in transit (TLS) in
   production; the prototype uses `ws://`/`http://` for local demo.
 - CSP / auth headers should be added when deploying beyond `localhost`.

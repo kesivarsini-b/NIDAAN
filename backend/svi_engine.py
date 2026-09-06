@@ -60,15 +60,42 @@ def _clamp(value: float, low: float = 0.0, high: float = 100.0) -> float:
     return max(low, min(high, float(value)))
 
 
+# Single source of truth for the continuous risk bands. The same bands are
+# mirrored by the browser offline engine and the PoA recommender.
+TIER_BANDS: List[Dict[str, Any]] = [
+    {"category": "LOW", "band_low": 0, "band_high": 30},
+    {"category": "MODERATE", "band_low": 31, "band_high": 60},
+    {"category": "HIGH", "band_low": 61, "band_high": 80},
+    {"category": "CRITICAL", "band_low": 81, "band_high": 100},
+]
+
+
 def _resolve_category(score: float) -> str:
     score = _clamp(score)
-    if score <= 30:
-        return "LOW"
-    if score <= 60:
-        return "MODERATE"
-    if score <= 80:
-        return "HIGH"
+    for band in TIER_BANDS:
+        if score <= band["band_high"]:
+            return band["category"]
     return "CRITICAL"
+
+
+def tier_band_info(score: float) -> Dict[str, Any]:
+    """Return the active band plus 0..1 progress toward crossing its ceiling.
+
+    Progress is (score - band_low) / (band_high - band_low + 1), so a gauge
+    can render a distinct, immediate transition the moment the score tips
+    into the next band.
+    """
+    score = _clamp(score)
+    for band in TIER_BANDS:
+        if score <= band["band_high"]:
+            span = max(1, band["band_high"] - band["band_low"] + 1)
+            return {
+                "category": band["category"],
+                "band_low": band["band_low"],
+                "band_high": band["band_high"],
+                "band_progress": round((score - band["band_low"]) / span, 4),
+            }
+    return {"category": "CRITICAL", "band_low": 81, "band_high": 100, "band_progress": 1.0}
 
 
 class SVIEngine:
@@ -146,6 +173,7 @@ class SVIEngine:
                 "audio_confidence": round(caudio, 3),
                 "formula": "C*(" + str(self.audio_weight) + "*As+" + str(self.text_weight) + "*Ts)+(1-C)*Ts",
             },
+            "tier": tier_band_info(svi),
             **(meta or {}),
         }
 

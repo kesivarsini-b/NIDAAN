@@ -138,4 +138,4 @@ so the proof-of-concept demo is fully self-contained with identical tier math.
 | `frontend/js/app.js` | Dashboard, live trace, offline SVI engine, dispatch modal |
 | `frontend/js/call_simulator.js` | WebRTC mic capture + synthetic distress caller |
 | `frontend/js/offline_data.js` | Offline scenario registry (15 calibrated cases) |
-| `tests/test_svi_engine.py` | 36-case regression suite (backend) |
+| `tests/` | 55-case regression suite (SVI engine + zero-error/statute anchors) |

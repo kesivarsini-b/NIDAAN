@@ -80,7 +80,7 @@
 
 **Deployment-ready:** single-container `uvicorn backend.app:app` (Docker), port `8000`, with a full browser **offline fallback** so the SVI math runs even with zero network.
 
-**Presenter notes:** one line per arrow — waveform in → features out → fused index → action steps. Everything shown is running code (15 calibrated scenarios, 36-test regression suite).
+**Presenter notes:** one line per arrow — waveform in → features out → fused index → action steps. Everything shown is running code (15 calibrated scenarios, 55-case regression suite).
 
 ---
 

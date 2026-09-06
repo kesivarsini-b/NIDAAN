@@ -392,22 +392,22 @@
         // ---- Statutory action plans (mirrors poa_recommender.py) ----
         const PLANS = {
             LOW: { risk_tier: "LOW", priority: "ROUTINE", poa_sections: ["Sec 3(2)(i)", "Sec 21(2)"],
-                steps: [{ action: "Auto-docket complaint in NHAA case management system", owner: "NHAA Docket Desk", sla: "Immediate", channel: "Internal" },
-                    { action: "Send routine inquiry status SMS to complainant", owner: "Automated Messaging", sla: "Within 2 hours", channel: "SMS 14566" }] },
+                steps: [{ action: "Auto-docket complaint in NHAA case management system", owner: "NHAA Docket Desk", sla: "Immediate", channel: "Internal", statute: "PoA Act 1989 · Sec 3(2)(i)" },
+                    { action: "Send routine inquiry status SMS to complainant", owner: "Automated Messaging", sla: "Within 2 hours", channel: "SMS 14566", statute: "PoA Act 1989 · Sec 21(2)" }] },
             MODERATE: { risk_tier: "MODERATE", priority: "PRIORITY", poa_sections: ["Sec 3(1)(r)", "Sec 18A", "Sec 22"],
-                steps: [{ action: "Priority callback by District Welfare Officer", owner: "District Welfare Officer", sla: "Within 24 hours", channel: "Phone 14566" },
-                    { action: "Schedule structured 48-hour safety recheck", owner: "Welfare Office", sla: "48 hours", channel: "Automated reminder" },
-                    { action: "Document preliminary FIR guidance", owner: "Legal Aid Cell", sla: "Within 24 hours", channel: "Document" }] },
+                steps: [{ action: "Priority callback by District Welfare Officer", owner: "District Welfare Officer", sla: "Within 24 hours", channel: "Phone 14566", statute: "PoA Act 1989 · Sec 3(1)(r)" },
+                    { action: "Schedule structured 48-hour safety recheck", owner: "Welfare Office", sla: "48 hours", channel: "Automated reminder", statute: "PoA Act 1989 · Sec 18A" },
+                    { action: "Document preliminary FIR guidance", owner: "Legal Aid Cell", sla: "Within 24 hours", channel: "Document", statute: "PoA Act 1989 · Sec 18A / Sec 22" }] },
             HIGH: { risk_tier: "HIGH", priority: "HIGH", poa_sections: ["Sec 3(2)(v)", "Sec 4", "Sec 6", "Sec 8"],
-                steps: [{ action: "Route call to senior counselor / trauma specialist", owner: "Senior Counselor", sla: "Immediate", channel: "Live transfer" },
-                    { action: "Trigger tele-medical assistance referral", owner: "Tele-Medicine Desk", sla: "Within 15 minutes", channel: "Referral + call" },
-                    { action: "Escalate to DSP-level officer with case summary", owner: "Deputy SP (Crime/SC-ST)", sla: "Within 30 minutes", channel: "High-priority ticket" }] },
+                steps: [{ action: "Route call to senior counselor / trauma specialist", owner: "Senior Counselor", sla: "Immediate", channel: "Live transfer", statute: "PoA Act 1989 · Sec 3(2)(v)" },
+                    { action: "Trigger tele-medical assistance referral", owner: "Tele-Medicine Desk", sla: "Within 15 minutes", channel: "Referral + call", statute: "PoA Act 1989 · Sec 4" },
+                    { action: "Escalate to DSP-level officer with case summary", owner: "Deputy SP (Crime/SC-ST)", sla: "Within 30 minutes", channel: "High-priority ticket", statute: "PoA Act 1989 · Sec 6 / Sec 3(2)(v)" }] },
             CRITICAL: { risk_tier: "CRITICAL", priority: "EMERGENCY", poa_sections: ["Sec 3(2)(v)", "Sec 15A(1)", "Sec 15A(2)", "Sec 21(2)"],
-                steps: [{ action: "Auto-bypass call queue (emergency transfer)", owner: "Switchboard Bot", sla: "Immediate", channel: "Live transfer" },
-                    { action: "Notify District Police PCR (armed response assessment)", owner: "District Police PCR", sla: "Within 1 minute", channel: "Emergency notification" },
-                    { action: "Activate Witness Protection Cell under Sec 15A(1)", owner: "Witness Protection Cell", sla: "Within 5 minutes", channel: "Secure channel" },
-                    { action: "Send victim location to nearest police station", owner: "NHAA Operations", sla: "Within 5 minutes", channel: "Encrypted dispatch" },
-                    { action: "Request emergency medical / ambulance dispatch", owner: "Tele-Medicine / 108", sla: "Within 10 minutes", channel: "Ambulance dispatch" }] },
+                steps: [{ action: "Auto-bypass call queue (emergency transfer)", owner: "Switchboard Bot", sla: "Immediate", channel: "Live transfer", statute: "PoA Act 1989 · Sec 3(2)(v)" },
+                    { action: "Notify District Police PCR (armed response assessment)", owner: "District Police PCR", sla: "Within 1 minute", channel: "Emergency notification", statute: "PoA Act 1989 · Sec 21(2)" },
+                    { action: "Activate Witness Protection Cell under Sec 15A(1)", owner: "Witness Protection Cell", sla: "Within 5 minutes", channel: "Secure channel", statute: "PoA Act 1989 · Sec 15A(1) — Witness Protection" },
+                    { action: "Send victim location to nearest police station", owner: "NHAA Operations", sla: "Within 5 minutes", channel: "Encrypted dispatch", statute: "PoA Act 1989 · Sec 15A(1) / Sec 21(2)" },
+                    { action: "Request emergency medical / ambulance dispatch", owner: "Tele-Medicine / 108", sla: "Within 10 minutes", channel: "Ambulance dispatch", statute: "PoA Act 1989 · Sec 21(2)" }] },
         };
         function planFor(score) { return PLANS[tier(score)] || PLANS.LOW; }
 
@@ -470,7 +470,8 @@
         if (!plan || !plan.steps || !plan.steps.length) return;
         const tier = (plan.risk_tier || "LOW").toUpperCase();
         const steps = plan.steps
-            .map((s) => "<li><strong>[" + s.owner + "]</strong> " + escapeHtml(s.action) + " <em>(" + s.channel + ", " + s.sla + ")</em></li>")
+            .map((s) => "<li><strong>[" + s.owner + "]</strong> " + escapeHtml(s.action) + " <em>(" + s.channel + ", " + s.sla + ")</em>" +
+                (s.statute ? ' <span class="stat">' + escapeHtml(s.statute) + "</span>" : "") + "</li>")
             .join("");
         const sections = (plan.poa_sections || []).join(", ");
         els.actionPlan.className = "action-plan plan-" + tier;

@@ -15,12 +15,15 @@ metric (C_audio) in [0, 1] reflecting how reliable the audio channel is.
 """
 from __future__ import annotations
 
+import logging
 import math
 from typing import Any, Dict, List, Optional, Tuple
 
 import numpy as np
 
 import config
+
+logger = logging.getLogger("nidaan.acoustic")
 
 try:
     import soundfile as sf
@@ -74,7 +77,20 @@ class AcousticAnalyzer:
             rms_dynamics       (float)
             tremor_strength    (float)
             features           (raw feature dictionary)
+
+        Zero-error guarantee: regardless of the input (empty buffers, silent
+        noise, corrupted frames, missing librosa/soundfile, worker audio
+        glitches) this method never raises and always returns a structurally
+        complete frame. Degenerate input degrades to a neutral (score 0,
+        confidence 0) frame instead of crashing the stream.
         """
+        try:
+            return self._analyze_impl(pcm, sample_rate)
+        except Exception as exc:  # pragma: no cover - defensive guarantee
+            logger.warning("acoustic analysis degraded to neutral frame: %s", exc)
+            return self._neutral_frame(sample_rate or self.sample_rate)
+
+    def _analyze_impl(self, pcm: np.ndarray, sample_rate: Optional[int]) -> Dict[str, Any]:
         sr = sample_rate or self.sample_rate
         pcm = self._prepare(pcm)
 
@@ -126,6 +142,26 @@ class AcousticAnalyzer:
     def analyze_live_chunk(self, pcm: np.ndarray) -> Dict[str, Any]:
         return self.analyze(pcm)
 
+    @staticmethod
+    def _neutral_frame(sample_rate: int) -> Dict[str, Any]:
+        """Stable, structurally complete all-zero frame for degenerate audio."""
+        return {
+            "acoustic_score": 0.0,
+            "signal_confidence": 0.0,
+            "pitch_std": 0.0,
+            "pitch_mean": 0.0,
+            "silence_ratio": 1.0,
+            "jitter": 0.0,
+            "shimmer": 0.0,
+            "rms_dynamics": 0.0,
+            "tremor_strength": 0.0,
+            "features": {
+                "frame_count": 0,
+                "library": AcousticAnalyzer._detect_library(),
+                "sample_rate": sample_rate,
+            },
+        }
+
     def load_audio_file(self, path: str) -> Tuple[np.ndarray, int]:
         """Load an audio file and resample to the configured rate."""
         if not _HAS_SOUNDFILE:
@@ -151,6 +187,9 @@ class AcousticAnalyzer:
     def _frame(self, pcm: np.ndarray, sr: int, frame_ms: int = 25, hop_ms: int = 10) -> np.ndarray:
         frame_len = max(1, int(sr * frame_ms / 1000))
         hop = max(1, int(sr * hop_ms / 1000))
+        # A chunk shorter than one frame must not raise: return an empty array.
+        if pcm.size < frame_len:
+            return np.empty((0, frame_len), dtype=np.float32)
         n_frames = max(1, (pcm.size - frame_len) // hop + 1)
         idx = np.arange(frame_len)
         frames = np.stack([pcm[idx + i * hop] for i in range(n_frames)])
@@ -173,6 +212,8 @@ class AcousticAnalyzer:
     def _voiced_mask(self, pcm: np.ndarray) -> np.ndarray:
         sr = self.sample_rate
         frame_rms = self._frame_rms(pcm, sr)
+        if frame_rms.size == 0:
+            return np.empty(0, dtype=bool)
         energy_threshold = float(np.percentile(frame_rms, 30))
         return frame_rms > energy_threshold
 
@@ -205,13 +246,17 @@ class AcousticAnalyzer:
         for i in range(n_frames):
             frame = pcm[i * hop: i * hop + frame_len]
             r = np.correlate(frame, frame, mode="full")[frame_len - 1:]
-            r[: max(1, int(sr / 400))] = 0
             if r.size == 0 or r.max() <= 0:
                 voiced_flags.append(False)
                 continue
+            r0 = float(r[0])  # zero-lag autocorrelation = frame energy reference
+            r[: max(1, int(sr / 400))] = 0  # ignore lags above 400 Hz
             lag = int(np.argmax(r))
-            f0 = sr / lag if lag > 0 else 0.0
-            if 70.0 <= f0 <= 400.0 and r[lag] > 0.3 * r[0]:
+            if lag <= 0:
+                voiced_flags.append(False)
+                continue
+            f0 = sr / lag
+            if 70.0 <= f0 <= 400.0 and r[lag] > 0.3 * r0:
                 pitches.append(f0)
                 voiced_flags.append(True)
             else:
