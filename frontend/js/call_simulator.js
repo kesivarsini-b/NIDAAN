@@ -95,7 +95,7 @@
                 for (let i = 0; i < chunkSamples; i++) {
                     buffer[i] = profileFn(start + i);
                 }
-                this.onChunk(this._encodeFloatPCM(buffer));
+                this.onChunk("audio_chunk", this._encodeFloatPCM(buffer));
             }, CHUNK_MS);
         }
 

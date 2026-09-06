@@ -20,6 +20,14 @@
             <span id="wsStatus">Disconnected</span>
             <span class="session-id" id="sessionId">--</span>
         </div>
+        <div class="offline-toggle-block">
+            <label class="switch" title="Run SVI fusion entirely in the browser (no server)">
+                <input type="checkbox" id="offlineToggle" />
+                <span class="slider round"></span>
+            </label>
+            <span class="offline-label">Offline Demo Mode</span>
+            <span id="demoModeBadge" class="demo-badge hidden">Demo Mode Active</span>
+        </div>
     </header>
 
     <main class="layout">
@@ -142,6 +150,24 @@
         <span id="formulaBadge">SVI = C&#8330;(&#8320;.&#8324;A&#8323;+&#8320;.&#8326;T&#8323;)+(1-C)T&#8323;</span>
     </footer>
 
+    <!-- Police / Legal dispatch confirmation (CRITICAL tier trigger) -->
+    <div id="dispatchModal" class="dispatch-modal" role="alertdialog" aria-modal="true" aria-labelledby="dispatchTitle">
+        <div class="dispatch-box">
+            <h2 id="dispatchTitle">Emergency Dispatch Initiated</h2>
+            <p class="dispatch-line"><strong>PoA Act 1989 &middot; Sec 3(2)(v)</strong> &mdash; CRITICAL SVI threshold crossed.</p>
+            <p>Immediate actions taken:</p>
+            <ul class="dispatch-list">
+                <li>District Police PCR notified &mdash; armed response assessment</li>
+                <li>Witness Protection Cell activated under Sec 15A(1)</li>
+                <li>Victim location dispatched to nearest police station (encrypted)</li>
+                <li>Ambulance / tele-medicine requested (108)</li>
+            </ul>
+            <p class="dispatch-id-line">Dispatch ID: <span class="dispatch-id">----------------</span></p>
+            <button id="dispatchAck" class="btn btn-primary dispatch-ack">Acknowledge &amp; Continue Monitoring</button>
+        </div>
+    </div>
+
+    <script src="/static/js/offline_data.js"></script>
     <script src="/static/js/call_simulator.js"></script>
     <script src="/static/js/app.js"></script>
 </body>

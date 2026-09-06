@@ -533,3 +533,154 @@ textarea {
 ::-webkit-scrollbar-thumb:hover {
     background: #2d3f63;
 }
+/* ---------- Offline Demo Mode toggle & badge ---------- */
+.offline-toggle-block {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-left: 22px;
+    padding-left: 22px;
+    border-left: 1px solid var(--border);
+}
+
+.offline-toggle-block .offline-label {
+    color: var(--muted);
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 42px;
+    height: 22px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    inset: 0;
+    background: #2b3550;
+    transition: 0.25s;
+    border-radius: 22px;
+}
+
+.slider:before {
+    content: "";
+    position: absolute;
+    height: 16px;
+    width: 16px;
+    left: 3px;
+    bottom: 3px;
+    background: #cbd5e1;
+    transition: 0.25s;
+    border-radius: 50%;
+}
+
+.switch input:checked + .slider {
+    background: #f59e0b;
+}
+
+.switch input:checked + .slider:before {
+    transform: translateX(20px);
+    background: #0b1220;
+}
+
+.demo-badge {
+    background: #f59e0b;
+    color: #0b1220;
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    padding: 3px 10px;
+    border-radius: 20px;
+    white-space: nowrap;
+    animation: badgePulse 1.4s ease-in-out infinite;
+}
+
+@keyframes badgePulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.5); }
+    50% { box-shadow: 0 0 0 6px rgba(245, 158, 11, 0); }
+}
+
+.hidden {
+    display: none !important;
+}
+
+.status-dot.offline {
+    background: #f59e0b;
+    box-shadow: 0 0 8px rgba(245, 158, 11, 0.8);
+}
+
+/* ---------- Police / Legal dispatch popup ---------- */
+.dispatch-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(5, 9, 18, 0.82);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 200;
+    backdrop-filter: blur(3px);
+}
+
+.dispatch-modal.open {
+    display: flex;
+}
+
+.dispatch-box {
+    background: linear-gradient(180deg, #17090c, #0d0f18 55%);
+    border: 1px solid #7f1d1d;
+    border-radius: 14px;
+    max-width: 520px;
+    width: 92%;
+    padding: 26px 30px;
+    box-shadow: 0 0 40px rgba(239, 68, 68, 0.35);
+    animation: modalIn 0.28s ease-out;
+}
+
+@keyframes modalIn {
+    from { transform: translateY(14px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.dispatch-box h2 {
+    margin: 0 0 6px;
+    font-size: 20px;
+    color: #fca5a5;
+}
+
+.dispatch-line {
+    color: #fecaca;
+    margin: 8px 0 12px;
+    font-size: 13px;
+}
+
+.dispatch-list {
+    margin: 10px 0 16px 0;
+    padding-left: 20px;
+    color: #e2e8f0;
+    font-size: 13.5px;
+    line-height: 1.7;
+}
+
+.dispatch-id-line {
+    color: var(--muted);
+    font-size: 12.5px;
+}
+
+.dispatch-id {
+    font-family: var(--mono);
+    color: #fdba74;
+}
+
+.dispatch-ack {
+    margin-top: 14px;
+    width: 100%;
+}
