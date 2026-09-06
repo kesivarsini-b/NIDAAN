@@ -1,0 +1,11 @@
+services:
+  nidaan:
+    build: .
+    image: nidaan:latest
+    container_name: nidaan-svi
+    ports:
+      - "8000:8000"
+    environment:
+      - NIDAAN_PORT=8000
+      - LOG_LEVEL=INFO
+    restart: unless-stopped

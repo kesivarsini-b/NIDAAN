@@ -1,0 +1,34 @@
+# Git
+.git
+.gitignore
+
+# Python caches / artifacts
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+build/
+dist/
+
+# Virtualenvs
+.venv/
+venv/
+
+# Data artifacts (large local recordings) - JSON scenarios stay, waveform dumps go
+data/*.wav
+data/*.flac
+data/*.mp3
+
+# Node / logs / editor
+node_modules/
+*.log
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Local env
+.env
+.env.local
