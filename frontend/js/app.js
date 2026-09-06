@@ -67,9 +67,9 @@
         const H = 120;
         const mid = H / 2;
 
-        ctx.fillStyle = "#06090f";
+        ctx.fillStyle = "#ffffff";
         ctx.fillRect(0, 0, W, H);
-        ctx.strokeStyle = "#38bdf8";
+        ctx.strokeStyle = "#2563eb";
         ctx.lineWidth = 1.6;
         ctx.beginPath();
 
@@ -119,10 +119,10 @@
 
     function tierColor(tier) {
         switch (tier) {
-            case "LOW": return "#22c55e";
-            case "MODERATE": return "#facc15";
-            case "HIGH": return "#f97316";
-            case "CRITICAL": return "#ef4444";
+            case "LOW": return "#16a34a";
+            case "MODERATE": return "#ca8a04";
+            case "HIGH": return "#ea580c";
+            case "CRITICAL": return "#dc2626";
             default: return "#94a3b8";
         }
     }
@@ -133,7 +133,7 @@
         const ctx = canvas.getContext("2d");
         const W = canvas.width = canvas.offsetWidth;
         const H = 90;
-        ctx.fillStyle = "#06090f";
+        ctx.fillStyle = "#ffffff";
         ctx.fillRect(0, 0, W, H);
 
         if (traceValues.length < 2) return;
@@ -141,7 +141,7 @@
         const max = 100;
         const step = W / (MAX_TRACE_POINTS - 1);
         ctx.lineWidth = 2;
-        ctx.strokeStyle = "#38bdf8";
+        ctx.strokeStyle = "#2563eb";
         ctx.beginPath();
         for (let i = 0; i < traceValues.length; i++) {
             const x = i * step;

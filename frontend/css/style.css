@@ -1,25 +1,27 @@
 /* =========================================================================
    NIDAAN - NHAA 14566 Operator Dashboard
-   Dark-mode control room aesthetic
+   Bright / high-contrast control-room theme
    ========================================================================= */
 
 :root {
-    --bg-0: #0b0f19;
-    --bg-1: #111827;
-    --bg-2: #1a2233;
-    --bg-3: #223048;
-    --border: #2b3a55;
-    --text-hi: #f3f4f6;
-    --text-mid: #9ca3af;
-    --text-low: #6b7280;
-    --accent: #38bdf8;
-    --accent-dim: #0ea5e9;
-    --green: #22c55e;
-    --yellow: #facc15;
-    --orange: #f97316;
-    --red: #ef4444;
+    --bg-0: #f8fafc;
+    --bg-1: #ffffff;
+    --bg-2: #ffffff;
+    --bg-3: #f1f5f9;
+    --border: #e2e8f0;
+    --text-hi: #0f172a;
+    --text-mid: #334155;
+    --text-low: #64748b;
+    --accent: #2563eb;
+    --accent-dim: #0284c7;
+    --green: #16a34a;
+    --yellow: #ca8a04;
+    --orange: #ea580c;
+    --red: #dc2626;
+    --muted: #64748b;
     --radius: 10px;
     --mono: "Consolas", "SF Mono", "JetBrains Mono", "Courier New", monospace;
+    --shadow: 0 1px 3px rgba(15, 23, 42, 0.06), 0 8px 24px rgba(15, 23, 42, 0.08);
 }
 
 * {
@@ -34,7 +36,7 @@ body {
 }
 
 body {
-    background: radial-gradient(1200px 600px at 70% -10%, #16233c 0%, var(--bg-0) 55%) fixed;
+    background: linear-gradient(180deg, #ffffff 0%, var(--bg-0) 100%) fixed;
     color: var(--text-hi);
     font-family: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
     font-size: 14px;
@@ -50,7 +52,7 @@ body {
     justify-content: space-between;
     gap: 16px;
     padding: 14px 22px;
-    background: linear-gradient(180deg, var(--bg-1) 0%, #0d1420 100%);
+    background: #ffffff;
     border-bottom: 1px solid var(--border);
     position: sticky;
     top: 0;
@@ -67,13 +69,13 @@ body {
     width: 42px;
     height: 42px;
     border-radius: 11px;
-    background: linear-gradient(135deg, var(--accent), #6366f1);
+    background: linear-gradient(135deg, #0ea5e9, #4f46e5);
     display: grid;
     place-items: center;
     font-weight: 800;
     font-size: 20px;
     color: #fff;
-    box-shadow: 0 0 22px rgba(56, 189, 248, 0.45);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.28);
 }
 
 .brand h1 {
@@ -94,7 +96,7 @@ body {
     gap: 8px;
     font-size: 12.5px;
     color: var(--text-mid);
-    background: var(--bg-2);
+    background: var(--bg-3);
     border: 1px solid var(--border);
     border-radius: 999px;
     padding: 6px 14px;
@@ -110,7 +112,7 @@ body {
 
 .status-dot.online {
     background: var(--green);
-    box-shadow: 0 0 8px rgba(34, 197, 94, 0.8);
+    box-shadow: 0 0 8px rgba(22, 163, 74, 0.45);
 }
 
 .session-id {
@@ -148,11 +150,11 @@ body {
 }
 
 .panel {
-    background: linear-gradient(180deg, var(--bg-1) 0%, #0e1626 100%);
+    background: var(--bg-1);
     border: 1px solid var(--border);
     border-radius: var(--radius);
     padding: 16px;
-    box-shadow: 0 12px 34px rgba(0, 0, 0, 0.35);
+    box-shadow: var(--shadow);
 }
 
 .panel-title {
@@ -186,7 +188,7 @@ body {
 }
 
 .btn-primary {
-    background: linear-gradient(135deg, var(--accent-dim), #2563eb);
+    background: linear-gradient(135deg, #0284c7, #2563eb);
     color: #fff;
     border: none;
     width: 100%;
@@ -194,12 +196,12 @@ body {
 }
 
 .btn-primary.recording {
-    background: linear-gradient(135deg, var(--red), #b91c1c);
+    background: linear-gradient(135deg, #ef4444, #b91c1c);
     animation: pulse 1.2s infinite;
 }
 
 @keyframes pulse {
-    0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.55); }
+    0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.45); }
     50% { box-shadow: 0 0 0 9px rgba(239, 68, 68, 0); }
 }
 
@@ -209,7 +211,7 @@ body {
 }
 
 .btn-secondary:hover:not(:disabled) {
-    background: #2b3c5c;
+    background: #e2e8f0;
 }
 
 .btn-ghost {
@@ -219,7 +221,7 @@ body {
 
 .btn-ghost:hover:not(:disabled) {
     color: var(--text-hi);
-    border-color: #3b4c6e;
+    border-color: #cbd5e1;
 }
 
 .field-label {
@@ -277,7 +279,7 @@ textarea {
 /* ---------- Waveform ---------- */
 .waveform-panel {
     margin-top: 14px;
-    background: #06090f;
+    background: #ffffff;
     border: 1px solid var(--border);
     border-radius: 8px;
     padding: 6px;
@@ -332,10 +334,10 @@ textarea {
 }
 
 .tier-unknown { background: var(--bg-3); color: var(--text-mid); }
-.tier-LOW { background: rgba(34, 197, 94, 0.14); color: var(--green); border-color: var(--green); }
-.tier-MODERATE { background: rgba(250, 204, 21, 0.14); color: var(--yellow); border-color: var(--yellow); }
-.tier-HIGH { background: rgba(249, 115, 22, 0.14); color: var(--orange); border-color: var(--orange); }
-.tier-CRITICAL { background: rgba(239, 68, 68, 0.18); color: var(--red); border-color: var(--red); animation: pulse 1s infinite; }
+.tier-LOW { background: rgba(22, 163, 74, 0.12); color: #16a34a; border-color: #16a34a; }
+.tier-MODERATE { background: rgba(202, 138, 4, 0.12); color: #ca8a04; border-color: #ca8a04; }
+.tier-HIGH { background: rgba(234, 88, 12, 0.12); color: #ea580c; border-color: #ea580c; }
+.tier-CRITICAL { background: rgba(220, 38, 38, 0.14); color: #dc2626; border-color: #dc2626; animation: pulse 1s infinite; }
 
 .subscores {
     display: grid;
@@ -346,7 +348,7 @@ textarea {
 }
 
 .subscore {
-    background: var(--bg-2);
+    background: #f8fafc;
     border: 1px solid var(--border);
     border-radius: 8px;
     padding: 8px 4px;
@@ -374,7 +376,7 @@ textarea {
 
 #sviTrace {
     width: 100%;
-    background: #06090f;
+    background: #ffffff;
     border: 1px solid var(--border);
     border-radius: 8px;
     display: block;
@@ -391,7 +393,7 @@ textarea {
 
 /* ---------- Transcript ---------- */
 .transcript-box {
-    background: #06090f;
+    background: #ffffff;
     border: 1px solid var(--border);
     border-radius: 8px;
     padding: 12px;
@@ -409,8 +411,8 @@ textarea {
 }
 
 .hl-trigger {
-    background: rgba(239, 68, 68, 0.28);
-    color: #fecaca;
+    background: rgba(220, 38, 38, 0.12);
+    color: #b91c1c;
     border-radius: 4px;
     padding: 0 2px;
     border-bottom: 1px solid var(--red);
@@ -433,9 +435,9 @@ textarea {
 }
 
 .chip.chip-hot {
-    background: rgba(239, 68, 68, 0.18);
+    background: rgba(220, 38, 38, 0.14);
     border-color: var(--red);
-    color: #fca5a5;
+    color: #b91c1c;
 }
 
 .chip-empty {
@@ -451,16 +453,16 @@ textarea {
 }
 
 .kw {
-    background: var(--bg-2);
-    border: 1px solid var(--border);
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
     border-radius: 5px;
     padding: 2px 8px;
-    color: var(--accent);
+    color: #1d4ed8;
 }
 
 /* ---------- Action plan ---------- */
 .action-plan {
-    background: var(--bg-2);
+    background: #ffffff;
     border: 1px solid var(--border);
     border-left: 3px solid var(--accent-dim);
     border-radius: 8px;
@@ -469,10 +471,10 @@ textarea {
     line-height: 1.6;
 }
 
-.action-plan.plan-LOW { border-left-color: var(--green); }
-.action-plan.plan-MODERATE { border-left-color: var(--yellow); }
-.action-plan.plan-HIGH { border-left-color: var(--orange); }
-.action-plan.plan-CRITICAL { border-left-color: var(--red); }
+.action-plan.plan-LOW { border-left-color: #16a34a; }
+.action-plan.plan-MODERATE { border-left-color: #ca8a04; }
+.action-plan.plan-HIGH { border-left-color: #ea580c; }
+.action-plan.plan-CRITICAL { border-left-color: #dc2626; }
 
 .action-plan .plan-header {
     font-weight: 800;
@@ -504,7 +506,7 @@ textarea {
     padding: 1px 7px;
     border: 1px solid var(--accent-dim);
     border-radius: 999px;
-    color: var(--accent);
+    color: #1d4ed8;
     font-family: var(--mono);
     font-size: 10.5px;
     letter-spacing: 0.03em;
@@ -545,16 +547,16 @@ textarea {
 }
 
 ::-webkit-scrollbar-track {
-    background: var(--bg-1);
+    background: var(--bg-3);
 }
 
 ::-webkit-scrollbar-thumb {
-    background: var(--bg-3);
+    background: #cbd5e1;
     border-radius: 6px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: #2d3f63;
+    background: #94a3b8;
 }
 /* ---------- Offline Demo Mode toggle & badge ---------- */
 .offline-toggle-block {
@@ -589,7 +591,7 @@ textarea {
     position: absolute;
     cursor: pointer;
     inset: 0;
-    background: #2b3550;
+    background: #cbd5e1;
     transition: 0.25s;
     border-radius: 22px;
 }
@@ -601,7 +603,7 @@ textarea {
     width: 16px;
     left: 3px;
     bottom: 3px;
-    background: #cbd5e1;
+    background: #ffffff;
     transition: 0.25s;
     border-radius: 50%;
 }
@@ -628,7 +630,7 @@ textarea {
 }
 
 @keyframes badgePulse {
-    0%, 100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.5); }
+    0%, 100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.45); }
     50% { box-shadow: 0 0 0 6px rgba(245, 158, 11, 0); }
 }
 
@@ -638,14 +640,14 @@ textarea {
 
 .status-dot.offline {
     background: #f59e0b;
-    box-shadow: 0 0 8px rgba(245, 158, 11, 0.8);
+    box-shadow: 0 0 8px rgba(245, 158, 11, 0.5);
 }
 
 /* ---------- Police / Legal dispatch popup ---------- */
 .dispatch-modal {
     position: fixed;
     inset: 0;
-    background: rgba(5, 9, 18, 0.82);
+    background: rgba(15, 23, 42, 0.55);
     display: none;
     align-items: center;
     justify-content: center;
@@ -658,13 +660,13 @@ textarea {
 }
 
 .dispatch-box {
-    background: linear-gradient(180deg, #17090c, #0d0f18 55%);
-    border: 1px solid #7f1d1d;
+    background: #ffffff;
+    border: 2px solid #dc2626;
     border-radius: 14px;
     max-width: 520px;
     width: 92%;
     padding: 26px 30px;
-    box-shadow: 0 0 40px rgba(239, 68, 68, 0.35);
+    box-shadow: 0 0 40px rgba(220, 38, 38, 0.3);
     animation: modalIn 0.28s ease-out;
 }
 
@@ -676,11 +678,11 @@ textarea {
 .dispatch-box h2 {
     margin: 0 0 6px;
     font-size: 20px;
-    color: #fca5a5;
+    color: #b91c1c;
 }
 
 .dispatch-line {
-    color: #fecaca;
+    color: #7f1d1d;
     margin: 8px 0 12px;
     font-size: 13px;
 }
@@ -688,7 +690,7 @@ textarea {
 .dispatch-list {
     margin: 10px 0 16px 0;
     padding-left: 20px;
-    color: #e2e8f0;
+    color: #1e293b;
     font-size: 13.5px;
     line-height: 1.7;
 }
@@ -700,7 +702,7 @@ textarea {
 
 .dispatch-id {
     font-family: var(--mono);
-    color: #fdba74;
+    color: #c2410c;
 }
 
 .dispatch-ack {
