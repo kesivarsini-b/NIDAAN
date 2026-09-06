@@ -27,15 +27,15 @@
   - Startup/shutdown handlers, scenario preloading.
   - CORS + static-frontend mounting.
   - REST endpoints: health, scenarios, analyze-text, analyze-audio, upload-audio, action-plans.
-- [~] Verify WebSocket stream routing (`/ws/stream-svi`):
+- [x] Verify WebSocket stream routing (`/ws/stream-svi`):
   - Session lifecycle (`StreamConnectionManager`).
   - Inbound audio chunk / text token / scenario / reset / eof frames.
   - Outbound SVI frames on the 1–2 s cadence (> final).
-- [ ] Integration test: run a 15-scenario sweep and confirm tier agreement.
-- [ ] Prepare `git` hygiene (`.gitignore`, initial commit, branch policy).
-- [ ] Wrap MVP: uvicorn launcher, `python backend/app.py` entry point, README execution steps.
+- [x] Integration test: run a 15-scenario sweep and confirm tier agreement.
+- [x] Prepare `git` hygiene (`.gitignore`, initial commit, branch policy).
+- [x] Wrap MVP: uvicorn launcher, `python backend/app.py` entry point, README execution steps.
+- [x] Post-MVP: `tests/` unit suite (engine, analyzers, recommender).
 - [ ] Post-MVP: operator queueing, TLS termination, authN.
-- [ ] Post-MVP: `tests/` unit suite (engine, analyzers, recommender).
 
 **Definition of done:** `uvicorn backend.app:app --reload` boots; dashboard loads; all REST + WS routes respond; 15 scenarios run end-to-end.
 
@@ -51,14 +51,14 @@
 - [x] Implement spectral/amplitude features: RMS dynamics, silence ratio (`T_sil/T_total`).
 - [x] Implement perturbation metrics: jitter, shimmer, 3–8 Hz tremor envelope.
 - [x] Derive `As` acoustic distress score and `C_audio` signal confidence with degradation penalty.
-- [~] Calibrate `ACOUSTIC_FEATURES` thresholds against the 15 synthetic scenarios:
+- [x] Calibrate `ACOUSTIC_FEATURES` thresholds against the 15 synthetic scenarios:
   - Validate pitch-std, silence-ratio normalization curves.
   - Confirm LOW scenarios score < 31 and CRITICAL scenarios > 81.
 - [x] Implement `svi_engine.py`:
   - Fusion formula `SVI = C·(0.4·As + 0.6·Ts) + (1−C)·Ts`.
   - Rolling multimodal window (`RollingSVIWindow`) for streaming cadence.
   - Risk tiering LOW/MODERATE/HIGH/CRITICAL.
-- [~] Evaluate on low-bandwidth degradation: injected silence → `C_audio` drop → text-track fallback.
+- [x] Evaluate on low-bandwidth degradation: injected silence → `C_audio` drop → text-track fallback.
 - [ ] (OpenSMILE) record prosody deltas for validation vs `librosa.pyin`.
 - [ ] Post-MVP: streaming noise-PAD filtering, VAD gating, per-operator calibration.
 
@@ -114,9 +114,9 @@
   - HIGH: senior counselor + tele-medical assistance.
   - CRITICAL: queue bypass + District Police PCR + Witness Protection Cell **Sec 15A(1)** + emergency dispatch.
   - Annotate relevant PoA sections per tier (Sec 3(1)(r)/(v)/(w)/(x), Sec 3(2)(v)/(va), Sec 4, Sec 6, Sec 8, Sec 15A, Sec 18A, Sec 21, Sec 22).
-- [ ] Legal validation pass: section citations re-checked against the SC/ST (PoA) Act 1989 + 2016 Amendment.
-- [ ] Data QA sweep: run all 15 scenarios through `analyze-text`; confirm predicted tier matches label.
-- [ ] Draft presentation slides (problem, architecture, SVI math, demo screenshots, impact metrics).
+- [ ] Legal validation pass: section citations re-checked against the SC/ST (PoA) Act 1989 + 2015 Amendment.
+- [x] Data QA sweep: run all 15 scenarios through `analyze-text`; confirm predicted tier matches label.
+- [x] Draft presentation slides (problem, architecture, SVI math, demo screenshots, impact metrics) — `docs/SIH_SUBMISSION_PPT.md`, `docs/PRESENTATION_DECK.md`, `DEMO_CHEATSHEET.md`, `docs/DEMO_VIDEO_SCRIPT.md`.
 - [ ] Post-MVP: add district-level aggregations + exclusion-heatmap dataset fields.
 
 **Definition of done:** dataset loads cleanly via `/api/v1/scenarios`; each of the 15 records produces a text-analysis tier matching its `expected_risk`; PoA section mapping is domain-validated.

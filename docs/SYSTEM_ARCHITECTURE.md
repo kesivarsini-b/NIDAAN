@@ -87,8 +87,8 @@ SVI = C_audio * (0.4 * As + 0.6 * Ts) + (1 - C_audio) * Ts
 
 | Input | Basis | Feature set |
 |---|---|---|
-| `As` (acoustic score) | 0.40 | pitch instability (pyin `pitch_std`), jitter, shimmer, tremor (FFT in 3–10 Hz band), voiced silence ratio |
-| `Ts` (text score) | 0.60 | 11-category Hinglish lexicon (suicide intent, self-harm, death-wish, abuse, caste slurs, threat, helplessness, isolation, family pressure, police/exposure fear), severity weights, intensifier amplification |
+| `As` (acoustic score) | 0.40 | pitch instability (pyin `pitch_std`), jitter, shimmer, tremor (FFT in 3–8 Hz band), voiced silence ratio |
+| `Ts` (text score) | 0.60 | 10-category Hinglish lexicon (physical threat, land arson, social boycott, caste abuse, suicidal ideation, sexual violence, property damage, family threat, economic deprivation, exclusion), severity weights, intensifier amplification |
 | `C_audio` (confidence) | — | voiced-frame ratio and stability: `As` is trusted when speech is present; on silence/noise, score decays to `Ts` |
 
 **Calibrated tier bands (identical in backend and browser offline engine):**
@@ -121,7 +121,7 @@ per step (see `backend/poa_recommender.py`).
 
 When the API is unreachable (server down, runtime network block, manual toggle, or `?offline=1`),
 the frontend switches to an embedded **JS SVI engine** (`frontend/js/offline_data.js` + `app.js`)
-that mirrors backend contracts: same 11-category text lexicon, same AC-autocorrelation pitch
+that mirrors backend contracts: same 10-category text lexicon, same AC-autocorrelation pitch
 (30 ms frame / 10 ms hop), jitter/shimmer/tremor, same fusion formula and tier bands, and the
 same tier-keyed action plans. 15 calibrated scenarios replay the full LOW→CRITICAL spectrum end-end,
 so the proof-of-concept demo is fully self-contained with identical tier math.

@@ -15,7 +15,7 @@ voice prosody** and **real-time text narrative** into a single **Stress &
 Vulnerability Index (SVI)**. The index is used to triage distress calls,
 flag trauma indicators, and automatically map callers to the correct
 statutory administrative action under the **SC/ST (Prevention of Atrocities)
-Act, 1989** (as amended 2016).
+Act, 1989** (as amended 2015).
 
 The system is built as a production-grade prototype:
 
@@ -162,8 +162,8 @@ T_s = min(100, Σ_category w_c · occurrences_c · intensity_c · 0.5)
 ```
 
 Severity weights are defined for ten categories including physical threat
-(25), sexual violence (28), suicidal ideation (30), caste abuse (22), land
-arson (20), and social boycott (18).
+(30), sexual violence (50), suicidal ideation (52), caste abuse (24), land
+arson (28), and social boycott (22).
 
 ---
 
@@ -211,14 +211,16 @@ Edit values as needed (ports, weights, push interval).
 
 ### 5. Run the server
 
+Quickest — one-click launcher (installs missing deps, picks a free port, opens the browser):
+
 ```bash
-uvicorn backend.app:app --reload
+python run.py
 ```
 
 Or directly:
 
 ```bash
-python backend/app.py
+uvicorn backend.app:app --reload
 ```
 
 The operator dashboard is then available at:
@@ -233,7 +235,7 @@ Interactive API docs (Swagger UI):
 http://127.0.0.1:8000/docs
 ```
 
-### 6. Quick smoke test
+### Quick smoke test
 
 ```bash
 curl http://127.0.0.1:8000/api/v1/health
@@ -241,6 +243,31 @@ curl -X POST http://127.0.0.1:8000/api/v1/analyze-text \
      -H "Content-Type: application/json" \
      -d '{"text":"Mera ghar jala diya aur log mujhe maarne aaye"}'
 ```
+
+Automated checks:
+
+```bash
+pytest tests/test_svi_engine.py            # 36-case backend regression suite
+python mock_caller.py                       # streams all 15 scenarios over WebSocket
+```
+
+### Docker (containerized deployment)
+
+```bash
+docker compose up --build                  # builds + serves on http://127.0.0.1:8000
+```
+
+The container runs `uvicorn backend.app:app` on port `8000` with a healthcheck
+and a non-root user. See `Dockerfile`.
+
+### Offline Demo Mode
+
+If the API is unreachable (no server, network block, or manual **Demo Mode**
+toggle, or `?offline=1` in the URL), the dashboard boots a browser-embedded SVI
+engine (`frontend/js/offline_data.js` + `app.js`) that reproduces the same
+10-category lexicon, autocorrelation pitch analysis, fusion formula, tier
+bands, and statutory action plans — so the demo is fully self-contained. A
+"Demo Mode" badge shows the active fallback.
 
 ---
 
@@ -303,8 +330,13 @@ NIDAAN/
 ├── README.md
 ├── TASKS.md                       # Team task breakdown (4 members)
 ├── requirements.txt
-├── .env.example
+├── .env.example                   # Environment template
+├── .dockerignore                  # Lean Docker build context
+├── Dockerfile                     # python:3.10-slim production image
+├── docker-compose.yml             # Port 8000 mapping for containerized runs
 ├── config.py                      # Central configuration & thresholds
+├── run.py                         # One-click launcher (deps + port + browser)
+├── mock_caller.py                 # 15-scenario WebSocket regression caller
 ├── backend/
 │   ├── __init__.py
 │   ├── app.py                     # FastAPI WebSockets & REST server
@@ -316,8 +348,17 @@ NIDAAN/
 │   ├── index.html                 # Operator dashboard
 │   ├── css/style.css              # Control-room styling
 │   └── js/
-│       ├── app.js                 # WS client, gauge, waveform UI
-│       └── call_simulator.js      # Mic + synthetic scenario runner
+│       ├── app.js                 # WS client, gauge, waveform UI, offline engine
+│       ├── call_simulator.js      # Mic + synthetic scenario runner
+│       └── offline_data.js        # Offline Demo Mode scenario registry
+├── tests/
+│   └── test_svi_engine.py         # 36-case backend regression suite
+├── docs/
+│   ├── SIH_SUBMISSION_PPT.md      # 6-slide SIH submission template
+│   ├── SYSTEM_ARCHITECTURE.md     # ASCII + Mermaid flow, fusion matrix
+│   ├── DEMO_VIDEO_SCRIPT.md       # 3-minute video frame-by-frame script
+│   └── PRESENTATION_DECK.md       # Extended judging deck + Q&A
+├── DEMO_CHEATSHEET.md             # Judge-ready live demo playbook
 └── data/
     └── synthetic_scenarios.json   # 15 localized test scripts & labels
 ```

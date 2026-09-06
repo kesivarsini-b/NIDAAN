@@ -25,7 +25,7 @@
 | 0:37 | 2b | Scenario dropdown opens; select **sc-007 → "Threat of Harm"**. Mouse clicks **Run Scenario**. Waveform bursts to life | "A caller describes being threatened — in Hinglish, the languages our helpline actually hears." |
 | 0:44 | 2c | Slow zoom on the **transcript panel** as tokens enter chunk-by-chunk; keyword chips light up *(dhamki, goli, jaan, log)* and the **keyword list** fills | "As the voice streams, trauma keywords are highlighted in real time — the words that, legally and clinically, must not be missed." |
 | 0:55 | 2d | Gauge sweep: SVI climbs **40 → 60 → 67**. Tier badge flips LOW→MODERATE→**HIGH**. Action-plan card swaps to "Senior Counselor live transfer · DSP escalation" | "Acoustic stress meets lexical lethality. Within twelve seconds the fused index crosses into HIGH." |
-| 1:05 | 2e | Left panel tour (scrub annotation rectangles): **pitch instability, tremor band, jitter** sparklines, then the **confidence %** readout | "Every number is explainable — pitch spread, tremor in the 3-to-10 hertz fear band, jitter — plus an audio-confidence weight on top." |
+| 1:05 | 2e | Left panel tour (scrub annotation rectangles): **pitch instability, tremor band, jitter** sparklines, then the **confidence %** readout | "Every number is explainable — pitch spread, tremor in the 3-to-8 hertz fear band, jitter — plus an audio-confidence weight on top." |
 | 1:14 | 2f | Hard cut to **sc-012 → CRITICAL**. Gauge surges past **80**. **Police/Medical Dispatch modal slides in** — ack button pulsing | "Now the same pipeline on a life-threat call. NIDAAN doesn't just score — it dispatches." |
 
 ---

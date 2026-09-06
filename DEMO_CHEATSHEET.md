@@ -45,8 +45,8 @@ Target: 3–5 minutes, zero fluff, offline-safe.
 
 **Q1. How is the score computed?**
 > Late fusion: `SVI = C·(0.4·As + 0.6·Ts) + (1−C)·Ts`. `As` is the acoustic score —
-> pitch instability (pyin), jitter, shimmer, tremor power in the 3–10 Hz band, silence ratio.
-> `Ts` is the lexical score from an 11-category Hinglish lexicon with severity weights and
+> pitch instability (pyin), jitter, shimmer, tremor power in the 3–8 Hz band, silence ratio.
+> `Ts` is the lexical score from a 10-category Hinglish lexicon with severity weights and
 > intensifiers. `C` is audio confidence — on silence the score leans on text. Both branches
 > are independently auditable in the trace panel.
 

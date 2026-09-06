@@ -37,7 +37,7 @@
 **Key functionality (on-slide bullets):**
 
 - **Asynchronous voice + text processing** — audio is streamed and analysed in **2-second chunks** over WebSocket while the operator speaks live; transcription text and acoustic features arrive in parallel, never blocking the call.
-- **Live SVI (Stress–Vulnerability Index) calculation** — a single **0–100 fused score** combining acoustic distress (pitch instability, jitter, shimmer, tremor band, silence gaps) with lexical markers (11-category Hinglish trauma/abuse lexicon, severity-weighted with intensifiers):
+- **Live SVI (Stress–Vulnerability Index) calculation** — a single **0–100 fused score** combining acoustic distress (pitch instability, jitter, shimmer, tremor band, silence gaps) with lexical markers (10-category Hinglish trauma/abuse lexicon, severity-weighted with intensifiers):
 
   `SVI = C_audio · (0.4 · As + 0.6 · Ts) + (1 − C_audio) · Ts`
 
@@ -74,7 +74,7 @@
 | Backend runtime | **FastAPI + Uvicorn (Python 3.10+)** | REST + WebSocket live engine, session orchestration |
 | Real-time transport | **WebRTC / WebSocket** | Browser mic capture, 2-second audio chunk streaming |
 | Speech / Text | **Bhashini ASR + Whisper** (integration path) and built-in Hinglish lexicon scorer | Hindi/Hinglish + dialectal speech-to-text and keyword/trigger extraction |
-| Acoustic analysis | **Librosa / pyin / OpenSMILE** (NumPy/SciPy fallback in-Core) | Pitch tracking, jitter, shimmer, tremor FFT (3–10 Hz band), silence ratio |
+| Acoustic analysis | **Librosa / pyin / OpenSMILE** (NumPy/SciPy fallback in-Core) | Pitch tracking, jitter, shimmer, tremor FFT (3–8 Hz band), silence ratio |
 | Fusion & policy | SVI fusion formula + static tier bands | Explainable 0–100 escalation with statutory PoA mapping |
 | UI | Vanilla JS dashboard (WebRTC + Canvas) | Gauge, trace, scenario player, offline mirror engine |
 
