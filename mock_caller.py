@@ -7,6 +7,8 @@ Offline NIDAAN demo caller — streams synthetic audio+text to the WS endpoint.
 Usage:
     python mock_caller.py                     # run all 15 scenarios
     python mock_caller.py sc-001 sc-010       # run specific scenario ids
+    python mock_caller.py --frames sc-007     # print every live svi_frame (video-repro mode)
+    python mock_caller.py --frames --chunks 24 sc-012   # pace 24 x 500 ms chunks
 """
 import asyncio
 import base64
@@ -79,7 +81,14 @@ def load_scenarios() -> dict:
         return {s["id"]: s for s in json.load(f)["scenarios"]}
 
 
-async def stream_scenario(ws, scenario: dict, chunk_count: int = 16, base_seed: int = 1000):
+async def stream_scenario(ws, scenario: dict, chunk_count: int = 16, base_seed: int = 1000,
+                          pace: bool = False, frames_out: list = None):
+    """Streams a scenario to the WS endpoint.
+
+    pace=True sleeps CHUNK_SEC per chunk so the server pushes live frames at
+    WS_PUSH_INTERVAL (1.5 s) cadence -- the same replay the dashboard shows.
+    Every received svi_frame is appended to frames_out (list of dicts).
+    """
     sid = scenario["id"]
     prof = scenario["synth_profile"]
 
@@ -93,7 +102,8 @@ async def stream_scenario(ws, scenario: dict, chunk_count: int = 16, base_seed: 
     for c in range(chunk_count):
         pcm = render_chunk(prof, seed=base_seed + c)
         await ws.send(encode_pcm(pcm))
-        await asyncio.sleep(0.05)
+        if pace:
+            await asyncio.sleep(CHUNK_SEC)
 
     # 3. Signal end-of-stream and drain until the final_frame arrives
     await ws.send(json.dumps({"type": "eof"}))
@@ -104,24 +114,62 @@ async def stream_scenario(ws, scenario: dict, chunk_count: int = 16, base_seed: 
             data = json.loads(await asyncio.wait_for(ws.recv(), timeout=5))
         except asyncio.TimeoutError:
             break
-        if data.get("type") == "final_frame":
+        mtype = data.get("type")
+        if mtype == "svi_frame":
+            if frames_out is not None:
+                frames_out.append(data.get("data", data))
+        elif mtype == "final_frame":
             final = data
             break
     return final or {}
 
 
+def parse_args(argv):
+    frames = "--frames" in argv
+    pace = frames  # pacing only matters when tracing live frames
+    chunks = 16
+    skip_next = False
+    ids = []
+    for i, a in enumerate(argv):
+        if skip_next:
+            skip_next = False
+            continue
+        if a == "--chunks":
+            try:
+                chunks = int(argv[i + 1])
+            except (ValueError, IndexError):
+                pass
+            skip_next = True
+        elif a.startswith("--"):
+            continue
+        else:
+            ids.append(a)
+    return frames, pace, chunks, ids
+
+
 async def main():
     scenarios = load_scenarios()
-    ids = sys.argv[1:] if len(sys.argv) > 1 else sorted(scenarios.keys())
+    frames_mode, pace, chunk_count, ids = parse_args(sys.argv[1:])
+    if not ids:
+        ids = sorted(scenarios.keys())
 
     for idx, sid in enumerate(ids):
         sc = scenarios.get(sid)
         if sc is None:
             print(f"[mock] Unknown scenario {sid} — skipping")
             continue
+        witnessed = []
         async with websockets.connect("ws://127.0.0.1:8000/ws/stream-svi") as ws:
             start = await ws.recv()
-            result = await stream_scenario(ws, sc, base_seed=1000 + idx * 20)
+            result = await stream_scenario(ws, sc, chunk_count=chunk_count,
+                                           base_seed=1000 + idx * 20,
+                                           pace=pace, frames_out=witnessed)
+        if frames_mode:
+            print(f"[mock] {sid} live frame trace ({len(witnessed)} pushed):")
+            for fr in witnessed:
+                print(f"        svi={fr.get('svi_score', 0):6.1f}  "
+                      f"tier={fr.get('risk_category', '?'):9}  as={fr.get('acoustic_score', -1):5.1f}"
+                      f"  ts={fr.get('text_score', -1):5.1f}")
         if not result:
             print(f"[mock] {sid:8}  NO final_frame received")
             continue

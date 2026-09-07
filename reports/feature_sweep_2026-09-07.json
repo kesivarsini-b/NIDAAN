@@ -1,0 +1,190 @@
+{
+  "generated_at": "2026-09-07T21:49:18.048620",
+  "base_url": "http://127.0.0.1:8000",
+  "checks": [
+    {
+      "feature": "GET / -> 200",
+      "ok": true,
+      "detail": "HTTP 200"
+    },
+    {
+      "feature": "GET / content marker",
+      "ok": true,
+      "detail": "nidaan"
+    },
+    {
+      "feature": "GET /static/css/style.css -> 200",
+      "ok": true,
+      "detail": "HTTP 200"
+    },
+    {
+      "feature": "GET /static/css/style.css content marker",
+      "ok": true,
+      "detail": "--accent"
+    },
+    {
+      "feature": "GET /static/js/app.js -> 200",
+      "ok": true,
+      "detail": "HTTP 200"
+    },
+    {
+      "feature": "GET /static/js/app.js content marker",
+      "ok": true,
+      "detail": "OfflineSVI"
+    },
+    {
+      "feature": "GET /static/js/call_simulator.js -> 200",
+      "ok": true,
+      "detail": "HTTP 200"
+    },
+    {
+      "feature": "GET /static/js/call_simulator.js content marker",
+      "ok": true,
+      "detail": "NIDAAN_SYNTH"
+    },
+    {
+      "feature": "GET /static/js/offline_data.js -> 200",
+      "ok": true,
+      "detail": "HTTP 200"
+    },
+    {
+      "feature": "GET /static/js/offline_data.js content marker",
+      "ok": true,
+      "detail": "sc-015"
+    },
+    {
+      "feature": "GET /api/v1/health status ok",
+      "ok": true,
+      "detail": "ok"
+    },
+    {
+      "feature": "health thresholds = 4 bands",
+      "ok": true,
+      "detail": "{'LOW': [0, 30], 'MODERATE': [31, 60], 'HIGH': [61, 80], 'CRITICAL': [81, 100]}"
+    },
+    {
+      "feature": "GET /api/v1/scenarios count=15",
+      "ok": true,
+      "detail": "count=15"
+    },
+    {
+      "feature": "scenario ids unique",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "feature": "scenario tier distribution 3/3/3/6",
+      "ok": true,
+      "detail": "{'LOW': 3, 'MODERATE': 3, 'HIGH': 3, 'CRITICAL': 6}"
+    },
+    {
+      "feature": "GET /api/v1/action-plans 4 tiers",
+      "ok": true,
+      "detail": "['LOW', 'MODERATE', 'HIGH', 'CRITICAL']"
+    },
+    {
+      "feature": "CRITICAL plan anchored to PoA Act 1989 (as amended 2015)",
+      "ok": true,
+      "detail": "Scheduled Castes and the Scheduled Tribes (Prevention of Atrocities) Act, 1989 (as amended 2015)"
+    },
+    {
+      "feature": "every CRITICAL step carries a statute anchor",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "feature": "CRITICAL plan includes Witness Protection Sec 15A(1)",
+      "ok": true,
+      "detail": "PoA Act 1989 · Sec 3(2)(v) | PoA Act 1989 · Sec 21(2) | PoA Act 1989 · Sec 15A(1) — Witness Protection | PoA Act 1989 · Sec 15A(1) / Sec 21(2) | PoA Act 1989 · Sec 21(2) | PoA Act 1989 · Sec 15A(1)"
+    },
+    {
+      "feature": "analyze-text 15/15 tier match",
+      "ok": true,
+      "detail": "15/15"
+    },
+    {
+      "feature": "analyze-text payload has triggers + keywords",
+      "ok": true,
+      "detail": "CRITICAL"
+    },
+    {
+      "feature": "analyze-text CRITICAL plan -> PCR step with statute",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "feature": "analyze-text benign text -> LOW (not crash)",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "feature": "analyze-text missing field -> 422",
+      "ok": true,
+      "detail": "HTTP 422"
+    },
+    {
+      "feature": "analyze-text empty text -> 422",
+      "ok": true,
+      "detail": "HTTP 422"
+    },
+    {
+      "feature": "analyze-audio valid float32 -> acoustic bounded",
+      "ok": true,
+      "detail": "as=59.72 conf=1.0"
+    },
+    {
+      "feature": "analyze-audio empty payload -> 200 neutral (zero-error)",
+      "ok": true,
+      "detail": "HTTP 200 as=0.0"
+    },
+    {
+      "feature": "analyze-audio garbage base64 -> 400",
+      "ok": true,
+      "detail": "HTTP 400"
+    },
+    {
+      "feature": "upload-audio valid float32 WAV -> 200 with filename",
+      "ok": true,
+      "detail": "HTTP 200"
+    },
+    {
+      "feature": "upload-audio garbage bytes -> 400",
+      "ok": true,
+      "detail": "HTTP 400"
+    },
+    {
+      "feature": "WS session_start",
+      "ok": true,
+      "detail": "session_start"
+    },
+    {
+      "feature": "WS scenario_loaded embeds text_analysis",
+      "ok": true,
+      "detail": "type=scenario_loaded tier=CRITICAL"
+    },
+    {
+      "feature": "WS text_token -> text_analysis reply",
+      "ok": true,
+      "detail": "text_analysis"
+    },
+    {
+      "feature": "WS reset -> reset_ack",
+      "ok": true,
+      "detail": "reset_ack"
+    },
+    {
+      "feature": "WS eof -> final_frame CRITICAL (sc-014)",
+      "ok": true,
+      "detail": "CRITICAL"
+    },
+    {
+      "feature": "WS final_frame plan statute-anchored",
+      "ok": true,
+      "detail": "CRITICAL"
+    }
+  ],
+  "summary": {
+    "green": 36,
+    "total": 36
+  }
+}

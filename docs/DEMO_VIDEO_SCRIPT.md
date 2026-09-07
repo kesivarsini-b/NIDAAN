@@ -24,9 +24,9 @@
 | 0:30 | 2a | Full screen: NIDAAN dashboard. Mouse hovers the **Demo Mode** toggle and clicks it ON. Badge "Offline" appears top-left | "This is the NIDAAN cockpit. To keep the demo honestly network-independent, we run the engine's browser mirror — identical math — in Demo Mode." |
 | 0:37 | 2b | Scenario dropdown opens; select **sc-007 → "Threat of Harm"**. Mouse clicks **Run Scenario**. Waveform bursts to life | "A caller describes being threatened — in Hinglish, the languages our helpline actually hears." |
 | 0:44 | 2c | Slow zoom on the **transcript panel** as tokens enter chunk-by-chunk; keyword chips light up *(dhamki, goli, jaan, log)* and the **keyword list** fills | "As the voice streams, trauma keywords are highlighted in real time — the words that, legally and clinically, must not be missed." |
-| 0:55 | 2d | Gauge sweep: SVI climbs **40 → 60 → 67**. Tier badge flips LOW→MODERATE→**HIGH**. Action-plan card swaps to "Senior Counselor live transfer · DSP escalation" | "Acoustic stress meets lexical lethality. Within twelve seconds the fused index crosses into HIGH." |
+| 0:55 | 2d | Gauge sweep: SVI reads **64** → tier badge lands **HIGH**. Action-plan card swaps to "Senior Counselor live transfer · DSP escalation" | "Acoustic stress meets lexical lethality. The fused index scores HIGH." |
 | 1:05 | 2e | Left panel tour (scrub annotation rectangles): **pitch instability, tremor band, jitter** sparklines, then the **confidence %** readout | "Every number is explainable — pitch spread, tremor in the 3-to-8 hertz fear band, jitter — plus an audio-confidence weight on top." |
-| 1:14 | 2f | Hard cut to **sc-012 → CRITICAL**. Gauge surges past **80**. **Police/Medical Dispatch modal slides in** — ack button pulsing | "Now the same pipeline on a life-threat call. NIDAAN doesn't just score — it dispatches." |
+| 1:14 | 2f | Hard cut to **sc-012 → CRITICAL**. Gauge reads **87**, well **past 80**. **Police/Medical Dispatch modal slides in** — ack button pulsing | "Now the same pipeline on a life-threat call. NIDAAN doesn't just score — it dispatches." |
 
 ---
 
@@ -58,4 +58,8 @@
 - **Subtitles:** burn English subs; top 20% for Act 1 (numbers on screen), bottom for dashboard acts.
 - **Music:** room-tone intro → low pulse from 1:30 → resolve warm at 2:41. No vocals over narration.
 - **Length guards:** if behind schedule, cut frame 2e (feature tour) first, then 4b (require offline proof).
-- **Truth-checks before render:** all SVI numbers (67 / 82) are reproduced by `mock_caller.py` against the released build; re-run before final render.
+- **Truth-checks before render:** the on-screen SVI numbers are **64** (frame 2d, sc-007 → HIGH) and **87** (frame 2f, sc-012 → CRITICAL). Re-verify before final render with the live server running:
+  - `python mock_caller.py --frames sc-007 sc-012` → expected `svi≈63` (HIGH) and `svi≈86.5` (CRITICAL) via the WS/server engine;
+  - `node scripts/fused_qa.js` → expected `svi=64.2` (sc-007) and `svi=87.5` (sc-012) via the browser demo engine (`OfflineSVI`) — the demo path the video is recorded on.
+
+  The two engines agree within ~1.5 points; if either drifts, re-render with the freshly measured values before using the video.
