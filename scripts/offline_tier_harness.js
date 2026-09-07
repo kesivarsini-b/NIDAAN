@@ -60,7 +60,47 @@ vm.runInContext("OfflineSVI = " + body, sandbox);
 
 const OfflineSVI = sandbox.OfflineSVI;
 const scenarios = sandbox.window.NIDAAN_FALLBACK_SCENARIOS;
+const embedded = sandbox.window.NIDAAN_EMBEDDED_SCENARIOS;
 const synth = sandbox.window.NIDAAN_SYNTH;
+
+/* ---- Registry parity: JSON source, embedded copy, and offline_data copy
+        must agree field-for-field so the offline and server paths can never
+        silently drift on labels, transcripts, or synth profiles. ---- */
+const jsonScenarios = JSON.parse(fs.readFileSync(path.join(ROOT, "data/synthetic_scenarios.json"), "utf8")).scenarios;
+const canonical = (s) =>
+    JSON.stringify({
+        id: s.id,
+        title: s.title,
+        expected_risk: s.expected_risk,
+        transcript: s.transcript,
+        synth_profile: s.synth_profile
+            ? Object.keys(s.synth_profile).sort().reduce((o, k) => ((o[k] = s.synth_profile[k]), o), {})
+            : null,
+    });
+const canonBy = (list) => {
+    const m = new Map();
+    for (const s of list) m.set(String(s.id), canonical(s));
+    return m;
+};
+const sources = {
+    "data/synthetic_scenarios.json": canonBy(jsonScenarios),
+    "frontend/js/call_simulator.js (embedded)": canonBy(embedded),
+    "frontend/js/offline_data.js": canonBy(scenarios),
+};
+const ids = sources["data/synthetic_scenarios.json"].keys();
+const parityDiffs = [];
+for (const id of ids) {
+    for (const [name, map] of Object.entries(sources)) {
+        const a = sources["data/synthetic_scenarios.json"].get(id);
+        const b = map.get(id);
+        if (a !== b) parityDiffs.push({ id, source: name });
+    }
+}
+if (parityDiffs.length) {
+    console.error("PARITY FAIL: registries drifted for:");
+    for (const d of parityDiffs) console.error(`  ${d.id}  vs ${d.source}`);
+}
+const parityOk = parityDiffs.length === 0;
 
 const SAMPLE_RATE = synth.SAMPLE_RATE;
 const CHUNK_SAMPLES = 8000; // 500 ms chunk, same as the browser synthesizer
@@ -108,4 +148,5 @@ for (const r of rows) {
 }
 const total = rows.length;
 console.log(`\nFidelity: ${total - failed}/${total} tier matches`);
-process.exit(failed === 0 ? 0 : 1);
+console.log(`Registry parity: ${parityOk ? "3/3 sources in sync" : "DRIFTED"}`);
+process.exit(failed === 0 && parityOk ? 0 : 1);

@@ -24,7 +24,7 @@ sys.path.insert(0, str(ROOT))
 import websockets
 
 SR = 16000
-CHUNK_SEC = 2.0
+CHUNK_SEC = 0.5
 CHUNK_SAMPLES = int(SR * CHUNK_SEC)
 
 # Final generator calibration constants (verified 15/15)
@@ -35,24 +35,35 @@ GAP_VALUE = 0.02
 DISTRESS_EXP = 2.0
 
 
-def render_chunk(distress: float, gaps: bool, n: int = CHUNK_SAMPLES, seed: int = 0) -> np.ndarray:
+def render_chunk(profile: dict, n: int = CHUNK_SAMPLES, seed: int = 0) -> np.ndarray:
+    """Sample-faithful port of the shipped call_simulator.js baseEmotionCurve
+    (stress + hard_breaks included), so the mock caller provokes the same
+    acoustic features the browser demo sends to the live WS engine."""
     rng = np.random.default_rng(seed)
+    distress = min(1.0, max(0.0, float(profile.get("distress", 0.5))))
+    stress = min(3.0, max(1.0, float(profile.get("stress", 1.0))))
+    gaps = bool(profile.get("silence_gaps", False))
+    breaks = bool(profile.get("hard_breaks", False))
     e = distress ** DISTRESS_EXP
     buf = np.zeros(n, dtype=np.float32)
     phase = 0.0
     base_f0 = 110 + e * 35
-    f0a = (6 + e * 24) * F0_GAIN
+    f0a = (6 + e * 24) * F0_GAIN * stress
     for i in range(n):
         t = i / SR
         contour = f0a * np.sin(2 * np.pi * 0.85 * t + 0.7)
-        tremor_fm = e * 9 * np.sin(2 * np.pi * 6.0 * t)
+        tremor_fm = e * 9 * stress * np.sin(2 * np.pi * 6.0 * t)
         f0 = max(70.0, base_f0 + contour + tremor_fm)
         phase += 2 * np.pi * f0 / SR
-        jitter = (rng.random() - 0.5) * 0.05 * (0.3 + e)
-        am = 1.0 + AM_GAIN * e * (0.5 + 0.5 * np.sin(2 * np.pi * 6.0 * t + 1.2))
+        jitter = (rng.random() - 0.5) * 0.05 * (0.3 + e * stress)
+        am = 1.0 + AM_GAIN * stress * e * (0.5 + 0.5 * np.sin(2 * np.pi * 6.0 * t + 1.2))
         gate = 1.0
         if gaps:
-            gate = GAP_VALUE if np.sin(2 * np.pi * 0.32 * t) > GAP_ON else 1.0
+            gate = GAP_VALUE
+            if np.sin(2 * np.pi * 0.32 * t) > GAP_ON:
+                gate = 1.0
+        if breaks and np.sin(2 * np.pi * 1.1 * t) > 0.68:
+            gate = 0.001
         amp = (0.18 + 0.32 * e) * (0.7 + 0.3 * np.sin(2 * np.pi * 0.5 * t)) * am
         buf[i] = (np.sin(phase) * amp + jitter) * gate
     return buf
@@ -68,7 +79,7 @@ def load_scenarios() -> dict:
         return {s["id"]: s for s in json.load(f)["scenarios"]}
 
 
-async def stream_scenario(ws, scenario: dict, chunk_count: int = 8, base_seed: int = 1000):
+async def stream_scenario(ws, scenario: dict, chunk_count: int = 16, base_seed: int = 1000):
     sid = scenario["id"]
     prof = scenario["synth_profile"]
 
@@ -78,9 +89,9 @@ async def stream_scenario(ws, scenario: dict, chunk_count: int = 8, base_seed: i
         "scenario_id": sid,
     }))
 
-    # 2. Stream audio chunks (2s each)
+    # 2. Stream audio chunks (500 ms each, matching call_simulator.js cadence)
     for c in range(chunk_count):
-        pcm = render_chunk(prof["distress"], prof["silence_gaps"], seed=base_seed + c)
+        pcm = render_chunk(prof, seed=base_seed + c)
         await ws.send(encode_pcm(pcm))
         await asyncio.sleep(0.05)
 

@@ -101,8 +101,8 @@ Reproducible check (needs Node ≥21 + the running server): `node scripts/fused_
   REST payload integrity, WebSocket contract.
 - `run.py` — one-click launcher: auto-installs missing light deps, boots uvicorn on `127.0.0.1:8000`,
   auto-opens the browser.
-- `mock_caller.py` — offline simulator streaming synthetic audio+text to the WS endpoint every 2 s;
-  prints per-scenario `OK`/`MISMATCH` verdict.
+- `mock_caller.py` — offline simulator streaming synthetic audio+text to the WS endpoint in 500 ms
+  chunks (matching `call_simulator.js`); prints per-scenario `OK`/`MISMATCH` verdict (15/15).
 
 **Run it:**
 ```bash
