@@ -91,6 +91,8 @@ sc-007..008  HIGH      ✔   sc-010..015 CRITICAL ✔
 **All 15 scenarios** stream audio + text, fuse through the rolling window, and land on their labeled
 tier. Plus automated regression tests lock in the boundaries.
 
+Reproducible check (needs Node ≥21 + the running server): `node scripts/fused_qa.js` → `Fused QA: 15/15 tier matches`.
+
 ---
 
 ## Slide 7 — Automated Test Suite + Launcher

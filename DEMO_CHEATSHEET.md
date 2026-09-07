@@ -32,6 +32,7 @@ python run.py                    # installs missing deps, frees a port, opens th
 - Tests: `pytest tests/` (expect `55 passed`)
 - Slides: `python scripts/generate_slides.py` → `docs/NIDAAN_SIH_Presentation.pptx`
 - Offline tier fidelity (needs Node): `node scripts/offline_tier_harness.js` → `Fidelity: 15/15`
+- Live fused path (needs Node + server up): `node scripts/fused_qa.js` → `Fused QA: 15/15 tier matches`
 - No server? Just open `frontend/index.html` — the UI self-enables **Demo Mode**.
 
 ---

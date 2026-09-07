@@ -1,0 +1,177 @@
+{
+  "generated_at": "2026-09-07T15:19:47.494Z",
+  "base_url": "http://127.0.0.1:8000",
+  "streams_seconds": 8,
+  "chunk_ms": 500,
+  "results": [
+    {
+      "id": "sc-001",
+      "title": "Complaint about Right to Work Application Delay",
+      "expected": "LOW",
+      "svi": 17.3,
+      "acoustic": 43.2,
+      "text": 0,
+      "conf": 1,
+      "got": "LOW",
+      "match": true
+    },
+    {
+      "id": "sc-002",
+      "title": "Ration Card Correction Query",
+      "expected": "LOW",
+      "svi": 17.2,
+      "acoustic": 42.9,
+      "text": 0,
+      "conf": 1,
+      "got": "LOW",
+      "match": true
+    },
+    {
+      "id": "sc-003",
+      "title": "Inquiry about Pension Eligibility",
+      "expected": "LOW",
+      "svi": 17.3,
+      "acoustic": 43.3,
+      "text": 0,
+      "conf": 1,
+      "got": "LOW",
+      "match": true
+    },
+    {
+      "id": "sc-004",
+      "title": "Denied Drinking Water Access at Public Tap",
+      "expected": "MODERATE",
+      "svi": 47.7,
+      "acoustic": 52.8,
+      "text": 44.3,
+      "conf": 1,
+      "got": "MODERATE",
+      "match": true
+    },
+    {
+      "id": "sc-005",
+      "title": "Casteist Slur During Shop Argument",
+      "expected": "MODERATE",
+      "svi": 52.5,
+      "acoustic": 55.3,
+      "text": 50.6,
+      "conf": 1,
+      "got": "MODERATE",
+      "match": true
+    },
+    {
+      "id": "sc-006",
+      "title": "School Boycott of Dalit Children",
+      "expected": "MODERATE",
+      "svi": 55.2,
+      "acoustic": 56.8,
+      "text": 54,
+      "conf": 1,
+      "got": "MODERATE",
+      "match": true
+    },
+    {
+      "id": "sc-007",
+      "title": "Land Grab by Landlord with Intimidation",
+      "expected": "HIGH",
+      "svi": 64.2,
+      "acoustic": 60.7,
+      "text": 66.6,
+      "conf": 1,
+      "got": "HIGH",
+      "match": true
+    },
+    {
+      "id": "sc-008",
+      "title": "Forced Removal from Well (Untouchability)",
+      "expected": "HIGH",
+      "svi": 62.8,
+      "acoustic": 62,
+      "text": 63.3,
+      "conf": 1,
+      "got": "HIGH",
+      "match": true
+    },
+    {
+      "id": "sc-009",
+      "title": "Verbal Abuse & Grocery Boycott Retaliation",
+      "expected": "HIGH",
+      "svi": 61.5,
+      "acoustic": 58.4,
+      "text": 63.6,
+      "conf": 1,
+      "got": "HIGH",
+      "match": true
+    },
+    {
+      "id": "sc-010",
+      "title": "House Arson After Panchayat Dispute",
+      "expected": "CRITICAL",
+      "svi": 83.3,
+      "acoustic": 82.3,
+      "text": 83.9,
+      "conf": 0.98,
+      "got": "CRITICAL",
+      "match": true
+    },
+    {
+      "id": "sc-011",
+      "title": "Sexual Harassment & Death Threat",
+      "expected": "CRITICAL",
+      "svi": 87.2,
+      "acoustic": 68,
+      "text": 100,
+      "conf": 1,
+      "got": "CRITICAL",
+      "match": true
+    },
+    {
+      "id": "sc-012",
+      "title": "Suicidal Ideation After Witness Attack",
+      "expected": "CRITICAL",
+      "svi": 87.5,
+      "acoustic": 68.7,
+      "text": 100,
+      "conf": 1,
+      "got": "CRITICAL",
+      "match": true
+    },
+    {
+      "id": "sc-013",
+      "title": "Village-Wide Social Boycott & Grocery Denial",
+      "expected": "CRITICAL",
+      "svi": 86.6,
+      "acoustic": 66.5,
+      "text": 100,
+      "conf": 1,
+      "got": "CRITICAL",
+      "match": true
+    },
+    {
+      "id": "sc-014",
+      "title": "Rape Threat During Land Dispute",
+      "expected": "CRITICAL",
+      "svi": 87,
+      "acoustic": 67.6,
+      "text": 100,
+      "conf": 1,
+      "got": "CRITICAL",
+      "match": true
+    },
+    {
+      "id": "sc-015",
+      "title": "Massacre-Like Violence After Panchayat",
+      "expected": "CRITICAL",
+      "svi": 86,
+      "acoustic": 83.6,
+      "text": 87.5,
+      "conf": 0.98,
+      "got": "CRITICAL",
+      "match": true
+    }
+  ],
+  "summary": {
+    "matched": 15,
+    "total": 15
+  }
+}
