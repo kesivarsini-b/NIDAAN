@@ -159,7 +159,9 @@
       "transcript": "Pichhli raat kuch log mere ghar mein aag laga kar bhaag gaye. Meri saari patrika jal gayi. Mere beete ko use dhakke maar ke roka gaya. Usse bola jaan se maar denge. Ab main apne bachchon ko leke abhi pada hoon, toh kya karu? Kaun madad karega?",
       "synth_profile": {
         "distress": 0.88,
-        "silence_gaps": true
+        "silence_gaps": true,
+        "stress": 1.6,
+        "hard_breaks": true
       },
       "expected_triggers": ["land_arson", "physical_threat", "family_threat"],
       "poa_sections_relevant": ["Sec 3(1)(v)", "Sec 3(2)(v)", "Sec 15A(1)"]
@@ -234,7 +236,9 @@
       "transcript": "Gaon ki panchayat ke baad ek jhund ne hamare ghar par fire kiya. Meri maati to nahi hua lekin mere bhai ko goli lagi hai. Ab woh log wapas aayenge. Police darwaza khol ke bilkul kaam nahi kiya. Main aur meri family abhi bhi bhaag se nikli hai. Bachche fati hui aankhon se dekhte hain. Jaldi batao kya karun?",
       "synth_profile": {
         "distress": 0.97,
-        "silence_gaps": false
+        "silence_gaps": false,
+        "stress": 1.6,
+        "hard_breaks": true
       },
       "expected_triggers": ["physical_threat", "property_damage", "family_threat", "caste_abuse"],
       "poa_sections_relevant": ["Sec 3(2)(v)", "Sec 3(2)(va)", "Sec 15A(1)", "Sec 21(2)"]

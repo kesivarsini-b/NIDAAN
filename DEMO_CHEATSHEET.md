@@ -31,6 +31,7 @@ python run.py                    # installs missing deps, frees a port, opens th
 - Server only: `uvicorn backend.app:app --reload`
 - Tests: `pytest tests/` (expect `55 passed`)
 - Slides: `python scripts/generate_slides.py` → `docs/NIDAAN_SIH_Presentation.pptx`
+- Offline tier fidelity (needs Node): `node scripts/offline_tier_harness.js` → `Fidelity: 15/15`
 - No server? Just open `frontend/index.html` — the UI self-enables **Demo Mode**.
 
 ---
@@ -100,7 +101,7 @@ python run.py                    # installs missing deps, frees a port, opens th
 | Tier bands | 0–30 / 31–60 / 61–80 / 81–100 |
 | Calibrated scenarios | 15 (3×LOW, 3×MODERATE, 3×HIGH, 6×CRITICAL) |
 | Backend regression | 55/55 passing (`pytest tests/`) |
-| Offline verification | 15/15 tier fidelity (Node harness) |
+| Offline verification | 15/15 — Node harness runs the real offline engine (app.js `OfflineSVI` + `call_simulator.js` curve) over all 15 scenarios and asserts the fused dispatch tier |
 | Fusion weights | Acoustic 0.4 / Text 0.6 (confidence-weighted) |
 
 ## 5. Emergency recovery lines (never stall)

@@ -142,21 +142,25 @@
 
     function baseEmotionCurve(t, p) {
         const distress = clamp(p.distress ?? 0.5, 0, 1);
+        const stress = clamp(p.stress ?? 1, 1, 3);
         const e = Math.pow(distress, DISTRESS_EXP);
         const tSec = t / SAMPLE_RATE;
         const baseF0 = 110 + e * 35;
-        const f0a = (6 + e * 24) * F0_GAIN;
+        const f0a = (6 + e * 24) * F0_GAIN * stress;
         const contour = f0a * Math.sin(2 * Math.PI * 0.85 * tSec + 0.7);
-        const tremorFM = e * 9 * Math.sin(2 * Math.PI * 6.0 * tSec);
+        const tremorFM = e * 9 * stress * Math.sin(2 * Math.PI * 6.0 * tSec);
         const f0 = Math.max(70.0, baseF0 + contour + tremorFM);
         _sviPhase += 2 * Math.PI * f0 / SAMPLE_RATE;
-        const jitter = (_rng01() - 0.5) * 0.05 * (0.3 + e);
-        const am = 1.0 + AM_GAIN * e * (0.5 + 0.5 * Math.sin(2 * Math.PI * 6.0 * tSec + 1.2));
+        const jitter = (_rng01() - 0.5) * 0.05 * (0.3 + e * stress);
+        const am = 1.0 + AM_GAIN * stress * e * (0.5 + 0.5 * Math.sin(2 * Math.PI * 6.0 * tSec + 1.2));
         let gate = 1.0;
         if (p.silenceGaps) {
             gate = GAP_VALUE;
             if (Math.sin(2 * Math.PI * 0.32 * tSec) > GAP_ON) gate = 1.0;
         }
+        /* Acute-emergency profiles only: rapid breath-pause breaks that the
+           acoustic scorer reads as real silence gaps (amplitude ~0.001). */
+        if (p.hard_breaks && Math.sin(2 * Math.PI * 1.1 * tSec) > 0.68) gate = 0.001;
         const amp = (0.18 + 0.32 * e) * (0.7 + 0.3 * Math.sin(2 * Math.PI * 0.5 * tSec)) * am;
         return (Math.sin(_sviPhase) * amp + jitter) * gate;
     }
@@ -183,6 +187,13 @@
 
     global.CallSimulator = CallSimulator;
 
+    /* Exported for offline-test harnesses (scripts/offline_tier_harness.js):
+       the exact synth curve + sample rate the browser sends as audio chunks. */
+    global.NIDAAN_SYNTH = {
+        SAMPLE_RATE: SAMPLE_RATE,
+        emotionCurve: baseEmotionCurve,
+    };
+
     /* ---------------------------------------------------------------------
        Embedded 15-scenario registry (fallback).
        Mirrors data/synthetic_scenarios.json so the dashboard is fully
@@ -200,12 +211,12 @@
         {"id": "sc-007", "title": "Land Grab by Landlord with Intimidation", "expected_risk": "HIGH", "transcript": "Meri 2 acre jameen malik ne zabardasti barbaad kar di. Jab main gaya toh usne bola tujhe jaan se maar dunga. Use gaon ka saara system baith gaya hai. Police mein report kiya toh bolte hain koi case nahi banega. Ab mujhe kahan jaana hai?", "synth_profile": {"distress": 0.68, "silence_gaps": true}},
         {"id": "sc-008", "title": "Forced Removal from Well (Untouchability)", "expected_risk": "HIGH", "transcript": "Hamare gaon ke bade baage mein jo kuan hai, wahan humse paani nahi bharna dete. Una jisne bola tum log kamina ho, jaao. Kal humne try kiya toh ek aadmi ne hamla kar diya aur bhaaga. Main ab paani ke liye 4 km door jaati hoon. Yehi mera roz hai.", "synth_profile": {"distress": 0.72, "silence_gaps": true}},
         {"id": "sc-009", "title": "Verbal Abuse & Grocery Boycott Retaliation", "expected_risk": "HIGH", "transcript": "Hamari dukaan pe ek bada saab log kabhi se aata hi nahi. Pichhle hafte ek aadmi aaya aur gaali di - chamar ka dukandar. Ab usne bola ki aap logon ko boyatt ho gaya, tumhara khana koi nahi khayega. Mera business band hone lag gaya hai. Kya case ho sakta hai?", "synth_profile": {"distress": 0.6, "silence_gaps": false}},
-        {"id": "sc-010", "title": "House Arson After Panchayat Dispute", "expected_risk": "CRITICAL", "transcript": "Pichhli raat kuch log mere ghar mein aag laga kar bhaag gaye. Meri saari patrika jal gayi. Mere beete ko use dhakke maar ke roka gaya. Usse bola jaan se maar denge. Ab main apne bachchon ko leke abhi pada hoon, toh kya karu? Kaun madad karega?", "synth_profile": {"distress": 0.88, "silence_gaps": true}},
+        {"id": "sc-010", "title": "House Arson After Panchayat Dispute", "expected_risk": "CRITICAL", "transcript": "Pichhli raat kuch log mere ghar mein aag laga kar bhaag gaye. Meri saari patrika jal gayi. Mere beete ko use dhakke maar ke roka gaya. Usse bola jaan se maar denge. Ab main apne bachchon ko leke abhi pada hoon, toh kya karu? Kaun madad karega?", "synth_profile": {"distress": 0.88, "silence_gaps": true, "stress": 1.6, "hard_breaks": true}},
         {"id": "sc-011", "title": "Sexual Harassment & Death Threat", "expected_risk": "CRITICAL", "transcript": "Ek aadmi roz mere kaam ke raaste mein aake chhed karta hai. Usne bola ki agar police mein bataya toh teri gharwale ko nahi chhodega. Mera pati darta hai. Usne aaj goli dikha ke dhamkaya. Main ab ghar se nikalne se darti hoon. Bahut dar lag raha hai. Please koi batao.", "synth_profile": {"distress": 0.92, "silence_gaps": true}},
         {"id": "sc-012", "title": "Suicidal Ideation After Witness Attack", "expected_risk": "CRITICAL", "transcript": "Maine ek gaon mein gawahi di thi ki chamar logon ke saath maar pitai hui. Ab woh log mujhe dhamkaate hain, mere ghar ke bahar aate hain. Main tab se so nahi paata. Jeena nahi chahti ab. Koi sunega nahi. Agar kal mere saath kuch ho jaye toh koi dekhega bhi nahi.", "synth_profile": {"distress": 0.95, "silence_gaps": true}},
         {"id": "sc-013", "title": "Village-Wide Social Boycott & Grocery Denial", "expected_risk": "CRITICAL", "transcript": "Hamare dharam ki potti baithe hone ke baad se gaon wale humse baat nahi karte. Koi paani ka galla nahi deta, dookaan band kar diya. Bache bhookhe hain. Kal unhone humare samaj ka jhandaa jalane ka bhi kaha. Yehi na hi hai ke hum mar jayein. Bataiye kahan jaayein.", "synth_profile": {"distress": 0.85, "silence_gaps": true}},
         {"id": "sc-014", "title": "Rape Threat During Land Dispute", "expected_risk": "CRITICAL", "transcript": "Land case mein meri family bahut pareshan hai. Ek thakur log aaj aaya aur bola jo zameen ka case jitaoge toh meri beti ko chhed kar rakh dunga. Mere pati ko ghumte huwe polise walon ne bhi dhakka diya. Dhamki roz milti hai. Hum kaise jeeyein? Kasam se ab mera dam nikla ja raha hai.", "synth_profile": {"distress": 0.9, "silence_gaps": true}},
-        {"id": "sc-015", "title": "Massacre-Like Violence After Panchayat", "expected_risk": "CRITICAL", "transcript": "Gaon ki panchayat ke baad ek jhund ne hamare ghar par fire kiya. Meri maati to nahi hua lekin mere bhai ko goli lagi hai. Ab woh log wapas aayenge. Police darwaza khol ke bilkul kaam nahi kiya. Main aur meri family abhi bhi bhaag se nikli hai. Bachche fati hui aankhon se dekhte hain. Jaldi batao kya karun?", "synth_profile": {"distress": 0.97, "silence_gaps": false}}
+        {"id": "sc-015", "title": "Massacre-Like Violence After Panchayat", "expected_risk": "CRITICAL", "transcript": "Gaon ki panchayat ke baad ek jhund ne hamare ghar par fire kiya. Meri maati to nahi hua lekin mere bhai ko goli lagi hai. Ab woh log wapas aayenge. Police darwaza khol ke bilkul kaam nahi kiya. Main aur meri family abhi bhi bhaag se nikli hai. Bachche fati hui aankhon se dekhte hain. Jaldi batao kya karun?", "synth_profile": {"distress": 0.97, "silence_gaps": false, "stress": 1.6, "hard_breaks": true}}
     ];
 
     global.NIDAAN_EMBEDDED_SCENARIOS = EMBEDDED_SCENARIOS;

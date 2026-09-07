@@ -1,0 +1,177 @@
+{
+  "date": "2026-09-07",
+  "base_url": "http://127.0.0.1:8000",
+  "health": {
+    "status": "ok",
+    "service": "NIDAAN",
+    "version": "0.1.0",
+    "time": "2026-09-07T14:04:58.336933+00:00",
+    "libraries": {
+      "librosa": "librosa"
+    },
+    "thresholds": {
+      "LOW": [
+        0,
+        30
+      ],
+      "MODERATE": [
+        31,
+        60
+      ],
+      "HIGH": [
+        61,
+        80
+      ],
+      "CRITICAL": [
+        81,
+        100
+      ]
+    }
+  },
+  "total": 15,
+  "passed": 15,
+  "failed": 0,
+  "action_plan_tiers_available": [
+    "CRITICAL",
+    "HIGH",
+    "LOW",
+    "MODERATE"
+  ],
+  "results": [
+    {
+      "id": "sc-001",
+      "title": "Complaint about Right to Work Application Delay",
+      "expected_risk": "LOW",
+      "got_tier": "LOW",
+      "semantic_trauma_score": 0.0,
+      "match": true,
+      "plan_steps": 2
+    },
+    {
+      "id": "sc-002",
+      "title": "Ration Card Correction Query",
+      "expected_risk": "LOW",
+      "got_tier": "LOW",
+      "semantic_trauma_score": 0.0,
+      "match": true,
+      "plan_steps": 2
+    },
+    {
+      "id": "sc-003",
+      "title": "Inquiry about Pension Eligibility",
+      "expected_risk": "LOW",
+      "got_tier": "LOW",
+      "semantic_trauma_score": 0.0,
+      "match": true,
+      "plan_steps": 2
+    },
+    {
+      "id": "sc-004",
+      "title": "Denied Drinking Water Access at Public Tap",
+      "expected_risk": "MODERATE",
+      "got_tier": "MODERATE",
+      "semantic_trauma_score": 44.31,
+      "match": true,
+      "plan_steps": 3
+    },
+    {
+      "id": "sc-005",
+      "title": "Casteist Slur During Shop Argument",
+      "expected_risk": "MODERATE",
+      "got_tier": "MODERATE",
+      "semantic_trauma_score": 50.59,
+      "match": true,
+      "plan_steps": 3
+    },
+    {
+      "id": "sc-006",
+      "title": "School Boycott of Dalit Children",
+      "expected_risk": "MODERATE",
+      "got_tier": "MODERATE",
+      "semantic_trauma_score": 54.04,
+      "match": true,
+      "plan_steps": 3
+    },
+    {
+      "id": "sc-007",
+      "title": "Land Grab by Landlord with Intimidation",
+      "expected_risk": "HIGH",
+      "got_tier": "HIGH",
+      "semantic_trauma_score": 66.59,
+      "match": true,
+      "plan_steps": 4
+    },
+    {
+      "id": "sc-008",
+      "title": "Forced Removal from Well (Untouchability)",
+      "expected_risk": "HIGH",
+      "got_tier": "HIGH",
+      "semantic_trauma_score": 63.32,
+      "match": true,
+      "plan_steps": 4
+    },
+    {
+      "id": "sc-009",
+      "title": "Verbal Abuse & Grocery Boycott Retaliation",
+      "expected_risk": "HIGH",
+      "got_tier": "HIGH",
+      "semantic_trauma_score": 63.59,
+      "match": true,
+      "plan_steps": 4
+    },
+    {
+      "id": "sc-010",
+      "title": "House Arson After Panchayat Dispute",
+      "expected_risk": "CRITICAL",
+      "got_tier": "CRITICAL",
+      "semantic_trauma_score": 83.94,
+      "match": true,
+      "plan_steps": 6
+    },
+    {
+      "id": "sc-011",
+      "title": "Sexual Harassment & Death Threat",
+      "expected_risk": "CRITICAL",
+      "got_tier": "CRITICAL",
+      "semantic_trauma_score": 100.0,
+      "match": true,
+      "plan_steps": 6
+    },
+    {
+      "id": "sc-012",
+      "title": "Suicidal Ideation After Witness Attack",
+      "expected_risk": "CRITICAL",
+      "got_tier": "CRITICAL",
+      "semantic_trauma_score": 100.0,
+      "match": true,
+      "plan_steps": 6
+    },
+    {
+      "id": "sc-013",
+      "title": "Village-Wide Social Boycott & Grocery Denial",
+      "expected_risk": "CRITICAL",
+      "got_tier": "CRITICAL",
+      "semantic_trauma_score": 100.0,
+      "match": true,
+      "plan_steps": 6
+    },
+    {
+      "id": "sc-014",
+      "title": "Rape Threat During Land Dispute",
+      "expected_risk": "CRITICAL",
+      "got_tier": "CRITICAL",
+      "semantic_trauma_score": 100.0,
+      "match": true,
+      "plan_steps": 6
+    },
+    {
+      "id": "sc-015",
+      "title": "Massacre-Like Violence After Panchayat",
+      "expected_risk": "CRITICAL",
+      "got_tier": "CRITICAL",
+      "semantic_trauma_score": 87.52,
+      "match": true,
+      "plan_steps": 6
+    }
+  ]
+}
