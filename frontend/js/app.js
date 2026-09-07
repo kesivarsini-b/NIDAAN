@@ -744,8 +744,9 @@
             const data = await resp.json();
             loadedScenarios = data.scenarios || [];
         } catch (e) {
-            // Offline fallback: use embedded registry shipped with the frontend.
-            loadedScenarios = (window.NIDAAN_FALLBACK_SCENARIOS || []).slice();
+            // Offline fallback: shipped registry (offline_data.js) or the
+            // registry embedded directly in call_simulator.js - zero network.
+            loadedScenarios = (window.NIDAAN_FALLBACK_SCENARIOS || window.NIDAAN_EMBEDDED_SCENARIOS || []).slice();
         }
         if (!loadedScenarios.length) {
             els.scenarioSelect.innerHTML = '<option value="">Scenarios unavailable</option>';

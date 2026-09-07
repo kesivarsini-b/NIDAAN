@@ -16,6 +16,25 @@ Target: 3–5 minutes, zero fluff, offline-safe.
 
 ---
 
+## 0. Boot the prototype exactly (copy-paste)
+
+```bash
+git clone https://github.com/kesivarsini-b/NIDAAN.git NIDAAN
+cd NIDAAN
+python -m venv .venv
+.venv\Scripts\activate            # Windows ; source .venv/bin/activate on macOS/Linux
+pip install -r requirements.txt
+python run.py                    # installs missing deps, frees a port, opens the browser
+```
+
+- Dashboard: `http://127.0.0.1:8000` (or whatever `run.py` prints).
+- Server only: `uvicorn backend.app:app --reload`
+- Tests: `pytest tests/` (expect `55 passed`)
+- Slides: `python scripts/generate_slides.py` → `docs/NIDAAN_SIH_Presentation.pptx`
+- No server? Just open `frontend/index.html` — the UI self-enables **Demo Mode**.
+
+---
+
 ## 1. Exact Click Sequence (Live Judge Demo)
 
 1. Open `index.html` (or `http://localhost:8000` via `run.py`). If the server is not running,
